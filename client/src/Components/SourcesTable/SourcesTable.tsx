@@ -4,14 +4,9 @@ import { useSourcesTableStyles } from "./SourcesTableStyles";
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import { AddSourceDialog } from "./AddSourceDialog/AddSourceDialog";
-
-export interface Source {
-    index: number,
-    folderLocation: string,
-    imageNamePattern: string,
-    datePattern: string,
-    sequenceLength: number
-}
+import { useAppDispatch, useAppSelector } from "../../Store/hooks";
+import { setSources } from "../../Store/Reducers/InputFilesReduer";
+import { Source } from "../../../../shared_modules/Types";
 
 export const getEmptySourceWithIndex = (index: number): Source => {
     return {
@@ -24,7 +19,10 @@ export const getEmptySourceWithIndex = (index: number): Source => {
 }
 
 export const SourcesTable = () => {
-    const [sources, setSources] = useState<Source[]>([]);
+    const dispatch = useAppDispatch();
+
+    const sources = useAppSelector((state) => state.inputFiles.sources);
+
     const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
     const [dialogSource, setDialogSource] = useState<Source>(getEmptySourceWithIndex(0));
     const [isEditDialog, setIsEditDialog] = useState(false);
@@ -54,16 +52,6 @@ export const SourcesTable = () => {
         return source.index.toString();
     }
 
-    const fieldChanged = (row: Source, field: keyof Source, value: string) => {
-        const newRow = { ...row, [field]: value };
-
-        const newSources = [...sources.slice(0, row.index)];
-        newSources.push(newRow);
-        newSources.push(...sources.slice(row.index + 1));
-
-        setSources(newSources);
-    }
-
     const onAddSourceClick = () => {
         setIsAddDialogOpen(true);
         setDialogSource(getEmptySourceWithIndex(sources.length));
@@ -78,13 +66,13 @@ export const SourcesTable = () => {
 
     const addSource = (source: Source) => {
         setIsAddDialogOpen(false);
-        setSources([...sources, source]);
+        dispatch(setSources([...sources, source]));
     }
 
     const editSource = (source: Source) => {
         setIsAddDialogOpen(false);
         const newSources = [...sources.slice(0, source.index), source, ...sources.slice(source.index + 1)];
-        setSources(newSources);
+        dispatch(setSources(newSources))
     }
 
     const onDeleteSource = (source: Source) => {
@@ -93,7 +81,7 @@ export const SourcesTable = () => {
         sourcesAfterIndex = sourcesAfterIndex.map(source => { return { ...source, index: source.index - 1 } });
 
         const newSources = [...sources.slice(0, source.index), ...sourcesAfterIndex];
-        setSources(newSources);
+        dispatch(setSources(newSources))
     }
 
     const onExitDialog = () => {

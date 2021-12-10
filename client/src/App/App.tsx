@@ -25,10 +25,11 @@ const theme = createTheme({
 function App() {
   const classes = useAppStyles();
 
-  const target = useAppSelector((state) => state.inputFiles.targetProperties);
+  const targetProperties = useAppSelector((state) => state.inputFiles.targetProperties);
+  const sources = useAppSelector((state) => state.inputFiles.sources);
 
   const onClickSimulate = () => {
-    (window as any).api.send("toMain", target);
+    (window as any).api.send("toMain", { targetProperties, sources });
   }
 
   (window as any).api.receive("fromMain", (data: string) => {

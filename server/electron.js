@@ -1,5 +1,5 @@
 const path = require('path');
-
+const fuck = require('./src/aaa');
 const { app, BrowserWindow, ipcMain } = require('electron');
 const isDev = require('electron-is-dev');
 
@@ -49,7 +49,7 @@ app.on('activate', () => {
   }
 });
 
-ipcMain.on("toMain", (event, args) => {
-  console.log(args);
-  win.webContents.send("fromMain", "fuck");
+ipcMain.on("toMain", (_, args) => {
+  const response = fuck(args);
+  win.webContents.send("fromMain", response);
 });

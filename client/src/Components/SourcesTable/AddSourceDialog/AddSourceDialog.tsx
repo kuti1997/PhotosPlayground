@@ -1,6 +1,6 @@
 import { Button, Dialog, DialogTitle, TextField } from '@material-ui/core';
 import { useState } from 'react';
-import { Source } from '../SourcesTable';
+import { Source } from '../../../../../shared_modules/Types';
 import { useAddSourceDialogStyles } from './AddSourceDialogStyles';
 
 interface NewSourceDialogProps {
