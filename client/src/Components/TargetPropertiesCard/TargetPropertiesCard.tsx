@@ -1,6 +1,6 @@
 import { TextField, Typography } from '@material-ui/core';
 import { useStyles } from "./styles";
-import { Target } from "../../../../shared_modules/Types";
+import { Target } from "shared-modules";
 import { useAppDispatch, useAppSelector } from "../../Store/hooks";
 import { setTargetProperty } from "../../Store/Reducers/InputFilesReduer";
 import React from 'react';

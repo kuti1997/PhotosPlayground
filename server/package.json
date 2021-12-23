@@ -2,48 +2,19 @@
   "name": "photos_playground",
   "version": "0.1.0",
   "homepage": "./",
-  "main": "electron.js",
+  "main": "./dist/electron.js",
   "private": true,
   "dependencies": {
-    "@testing-library/jest-dom": "^5.12.0",
-    "@testing-library/react": "^11.2.7",
-    "@testing-library/user-event": "^12.8.3",
-    "@types/jest": "^26.0.23",
-    "@types/node": "^12.20.13",
-    "cross-env": "^7.0.3",
-    "typescript": "^4.2.4",
-    "web-vitals": "^1.1.2"
+    "web-vitals": "^1.1.2",
+    "@types/jest": "^26.0.24",
+    "@types/node": "^15.14.1",
+    "typescript": "^4.4.3"
   },
   "scripts": {
-    "dev": "concurrently -k \"cross-env BROWSER=none npm start --prefix ../client \" \"npm:electron\"",
-    "electron": "wait-on tcp:3000 && electron .",
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+    "electron": "tsc && electron ."
   },
   "devDependencies": {
-    "concurrently": "^6.1.0",
     "electron": "^12.0.7",
-    "electron-is-dev": "^2.0.0",
-    "wait-on": "^5.3.0"
+    "electron-is-dev": "^2.0.0"
   }
 }

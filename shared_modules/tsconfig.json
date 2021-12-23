@@ -22,9 +22,5 @@
   },
   "include": [
     "src"
-  ],
-  "paths" : {
-    "shared-modules": ["node_modules/shared-modules/src"],
-    "shared-modules/*": ["node_modules/shared-modules/src/*"]
-  }
+  ]
 }

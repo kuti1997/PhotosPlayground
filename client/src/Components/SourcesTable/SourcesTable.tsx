@@ -6,7 +6,7 @@ import AddIcon from '@material-ui/icons/Add';
 import { AddSourceDialog } from "./AddSourceDialog/AddSourceDialog";
 import { useAppDispatch, useAppSelector } from "../../Store/hooks";
 import { setSources } from "../../Store/Reducers/InputFilesReduer";
-import { Source } from "../../../../shared_modules/Types";
+import { Source } from "shared-modules";
 
 export const getEmptySourceWithIndex = (index: number): Source => {
     return {
