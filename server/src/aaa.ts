@@ -1,5 +1,3 @@
-function fuckMe () {
+export default function fuckMe () {
     return "fuck";
 }
-
-module.exports = fuckMe;

@@ -1,12 +1,10 @@
-import { Source, Target } from '../../shared_modules/Types';
+import { Source, Target } from "shared-modules";
 
 interface PhotosInput {
     targetProperties: Target,
     sources: Source[]
 }
-
-function processPhotosConfig ( {targetProperties, sources}: PhotosInput ) {
+//{targetProperties, sources}: PhotosInput
+export function processPhotosConfig() {
     return "fuck";
 }
-
-module.exports =  processPhotosConfig ;

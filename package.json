@@ -1,0 +1,17 @@
+{
+  "name": "photos_playground",
+  "version": "0.1.0",
+  "homepage": "./",
+  "private": true,
+  "dependencies": {
+    "cross-env": "^7.0.3",
+    "web-vitals": "^1.1.2"
+  },
+  "scripts": {
+    "dev": "concurrently -k \"cross-env BROWSER=none npm start --prefix ./client \" \"wait-on tcp:3000 && npm run electron --prefix ./server\""
+  },
+  "devDependencies": {
+    "concurrently": "^6.1.0",
+    "wait-on": "^5.3.0"
+  }
+}

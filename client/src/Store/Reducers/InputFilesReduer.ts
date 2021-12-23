@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { Source, Target } from '../../../../shared_modules/Types';
+import { Source, Target } from 'shared-modules';
 
 // Define a type for the slice state
 interface InputReducerState {

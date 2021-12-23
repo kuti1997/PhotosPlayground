@@ -1,9 +1,11 @@
-const path = require('path');
-const fuck = require('./src/aaa');
-const { app, BrowserWindow, ipcMain } = require('electron');
-const isDev = require('electron-is-dev');
+import { BrowserWindow } from "electron";
+import path from 'path';
+import {processPhotosConfig} from './src/photosHandler';
 
-let win;
+import { app, ipcMain } from 'electron';
+import  isDev from 'electron-is-dev';
+
+let win: BrowserWindow;
 
 function createWindow() {
   // Create the browser window.
@@ -50,6 +52,6 @@ app.on('activate', () => {
 });
 
 ipcMain.on("toMain", (_, args) => {
-  const response = fuck(args);
+  const response = processPhotosConfig();
   win.webContents.send("fromMain", response);
 });
