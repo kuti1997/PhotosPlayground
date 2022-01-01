@@ -17,7 +17,7 @@ export const AddSourceDialog = (props: NewSourceDialogProps) => {
     const isSourceValid = () => {
         const { folderLocation, imageNamePattern, datePattern } = source;
 
-        if (!folderLocation || !datePattern) return false;
+        if (!folderLocation) return false;
         if (!imageNamePattern.includes("{date}") && !imageNamePattern.includes("{sequence}")) return false;
         return true;
     }
@@ -36,6 +36,7 @@ export const AddSourceDialog = (props: NewSourceDialogProps) => {
         <DialogTitle className={classes.dialogTitle}>
             Add New Source
         </DialogTitle>
+
         <div className={classes.dialogBody}>
             {
                 fields.map(field => {
