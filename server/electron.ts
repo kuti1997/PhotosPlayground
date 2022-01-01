@@ -1,6 +1,6 @@
 import { BrowserWindow } from "electron";
 import path from 'path';
-import {processPhotosConfig} from './src/photosHandler';
+import {PhotosInput, processPhotosConfig} from './src/photosHandler';
 
 import { app, ipcMain } from 'electron';
 import  isDev from 'electron-is-dev';
@@ -51,7 +51,7 @@ app.on('activate', () => {
   }
 });
 
-ipcMain.on("toMain", (_, args) => {
-  const response = processPhotosConfig();
+ipcMain.on("toMain", (_, args: PhotosInput) => {
+  const response = processPhotosConfig(args);
   win.webContents.send("fromMain", response);
 });

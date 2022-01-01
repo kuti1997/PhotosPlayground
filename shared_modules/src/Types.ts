@@ -1,9 +1,9 @@
-export interface Source extends BasicFolder{
+export interface Source extends BasicFolder {
     index: number,
     folderLocation: string,
 }
 
-export interface Target extends BasicFolder{
+export interface Target extends BasicFolder {
     outputFolderLocation: string,
 }
 
