@@ -1,12 +1,14 @@
-import { IconButton, TableBody, TableHead } from "@material-ui/core";
-import { Table, TableCell, TableRow, TextField } from "@material-ui/core";
+import { TableBody, TableHead } from "@material-ui/core";
+import { Table, TableCell, TableRow } from "@material-ui/core";
 import { useCommonTabletyles } from "./CommonTableStyles";
-import DeleteIcon from '@material-ui/icons/Delete';
-import EditIcon from '@material-ui/icons/Edit';
+import { CommonTableRow } from "./CommonTableRow/CommonTableRow";
+import { EmptyRows } from "./EmptyRows/EmptyRows";
+import { DEFAULT_MIN_ROWS } from "./models";
 
 export interface ColumnDefinition<T> {
     field: keyof T,
-    text: string
+    text: string,
+    isEditable?: boolean
 }
 
 interface CommonTableProps<T> {
@@ -14,12 +16,13 @@ interface CommonTableProps<T> {
     rows: T[],
     columnDefinitions: ColumnDefinition<T>[],
     getKeyFromRow(row: T): string,
-    onDeleteRow?(row: T): void,
-    onEditRow?(row: T): void,
-    fieldChanged?(row: T, field: keyof T, value: string): void
+    onDeleteRow?(id: string): void,
+    onEditRow?(id: string, field: keyof T, value: string): void,
+    onClickEdit?(row: T): void,
+    onAddRow?(field: keyof T, value: string): void
 }
 
-const DEFAULT_MIN_ROWS = 5;
+export type ChangeEvent = React.ChangeEvent<HTMLInputElement>;
 
 export const CommonTable = <T,>(props: CommonTableProps<T>) => {
     const classes = useCommonTabletyles();
@@ -29,35 +32,18 @@ export const CommonTable = <T,>(props: CommonTableProps<T>) => {
         return isOddIndex ? classes.oddTableCellColor : classes.evenTableCellColor;
     }
 
-    const getEmptyRows = () => {
-        const minRows = props.minRows ?? DEFAULT_MIN_ROWS;
-        const emptyRowsCount = Math.max(0, minRows - props.rows.length);
-
-        let emptyRows = [];
-        for (let rowIndex = props.rows.length; rowIndex < minRows; rowIndex++) {
-            emptyRows.push(<TableRow key={rowIndex} className={getRowClassName(rowIndex)}>
-                <>
-                    {
-                        props.columnDefinitions.map((_, index: number) =>
-                            <TableCell key={index} className={classes.tableCell} />
-                        )
-                    }
-                    {
-                        props.onDeleteRow
-                        && <TableCell className={classes.tableCell} />
-                    }
-                    {
-                        props.onEditRow
-                        && <TableCell className={classes.tableCell} />
-                    }
-                </>
-            </TableRow>);
-        }
-        return emptyRows;
+    const onChangeField = (event: ChangeEvent, row: T, field: keyof T) => {
+        props.onEditRow?.(props.getKeyFromRow(row), field, event.target.value);
     }
 
-    const onChangeField = (event: React.ChangeEvent<HTMLInputElement>, row: T, field: keyof T) => {
-        props.fieldChanged?.(row, field, event.target.value);
+    const hasActionCell = Boolean(props.onClickEdit || props.onDeleteRow);
+
+    const minRows = props.minRows ?? DEFAULT_MIN_ROWS;
+    const numOfEmptyRows = Math.max(minRows - props.rows.length, 0);
+
+    const getEmptyRowClassName = (rowIndex: number) => {
+        const isOddIndex = (props.rows.length + rowIndex) % 2 === 1;
+        return isOddIndex ? classes.oddTableCellColor : classes.evenTableCellColor;
     }
 
     return <Table>
@@ -65,22 +51,15 @@ export const CommonTable = <T,>(props: CommonTableProps<T>) => {
             <TableRow className={classes.tableHeadRow}>
                 <>
                     {
-                        props.onDeleteRow
-                        && <TableCell className={classes.tableCell} >
-                            Delete Item
-                        </TableCell>
-                    }
-                    {
-                        props.onEditRow
-                        && <TableCell className={classes.tableCell} >
-                            Edit Item
-                        </TableCell>
-                    }
-                    {
                         props.columnDefinitions.map(columnDefinition =>
                             <TableCell key={columnDefinition.field.toString()} className={classes.tableCell}>
                                 {columnDefinition.text}
                             </TableCell>)
+                    }
+                    {
+                        hasActionCell && <TableCell className={classes.tableCell} >
+                            Actions
+                        </TableCell>
                     }
                 </>
             </TableRow>
@@ -88,45 +67,27 @@ export const CommonTable = <T,>(props: CommonTableProps<T>) => {
         <TableBody>
             {
                 props.rows.map((row, rowIndex) =>
-                    <TableRow key={props.getKeyFromRow(row)} className={getRowClassName(rowIndex)}>
-                        {
-                            <>
-                                {
-                                    props.onDeleteRow
-                                    && <TableCell>
-                                        <IconButton onClick={() => props.onDeleteRow?.(row)}>
-                                            <DeleteIcon />
-                                        </IconButton>
-                                    </TableCell>
-                                }
-                                {
-                                    props.onEditRow
-                                    && <TableCell>
-                                        <IconButton onClick={() => props.onEditRow?.(row)}>
-                                            <EditIcon />
-                                        </IconButton>
-                                    </TableCell>
-                                }
-                                {
-                                    props.columnDefinitions.map(columnDefinition =>
-                                        <TableCell className={classes.tableCell} key={columnDefinition.field.toString()}>
-                                            {
-                                                !props.fieldChanged
-                                                    ? row[columnDefinition.field]
-                                                    : <TextField value={row[columnDefinition.field]}
-                                                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => onChangeField(event, row, columnDefinition.field)} />
+                    <CommonTableRow key={props.getKeyFromRow(row)} row={row}
+                        rowClassName={getRowClassName(rowIndex)}
+                        cellClassName={classes.tableCell}
+                        columnDefinitions={props.columnDefinitions}
+                        getKeyFromRow={props.getKeyFromRow}
+                        onDeleteRow={props.onDeleteRow}
+                        onChangeField={onChangeField}
+                        onClickEdit={props.onClickEdit} />
+                )
+            }
 
-                                            }
-                                        </TableCell>
-                                    )
-                                }
-                            </>
-                        }
-                    </TableRow>)
-            }
             {
-                getEmptyRows()
+                numOfEmptyRows > 0 &&
+                <EmptyRows getRowClassName={getEmptyRowClassName}
+                    numOfRows={numOfEmptyRows}
+                    columnDefinitions={props.columnDefinitions}
+                    hasActionCell={hasActionCell}
+                    onAddRow={props.onAddRow}
+                    tableCellStyle={classes.tableCell} />
             }
+
         </TableBody>
     </Table>
 }

@@ -1,14 +1,18 @@
-export interface Source extends BasicFolder {
-    index: number,
-    folderLocation: string,
+export interface SourcePattern extends FilePattern {
+    id: string
 }
 
-export interface Target extends BasicFolder {
+export interface Target extends FilePattern {
     outputFolderLocation: string,
 }
 
-export interface BasicFolder {
-    imageNamePattern: string,
+export interface FilePattern {
+    namePattern: string,
     datePattern: string,
     sequenceLength: number
+}
+
+export interface SourceFolder {
+    path: string,
+    id: string
 }

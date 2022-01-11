@@ -1,14 +1,16 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { Source, Target } from 'shared-modules';
+import { SourcePattern, SourceFolder, Target } from 'shared-modules';
 
 // Define a type for the slice state
 interface InputReducerState {
     targetProperties: Target,
-    sources: Source[]
+    sourcePatterns: SourcePattern[],
+    sourceFolders: SourceFolder[]
+
 }
 
 const EMPTY_TARGET: Target = {
-    imageNamePattern: "",
+    namePattern: "",
     datePattern: "",
     sequenceLength: 1,
     outputFolderLocation: ""
@@ -17,7 +19,8 @@ const EMPTY_TARGET: Target = {
 // Define the initial state using that type
 const initialState: InputReducerState = {
     targetProperties: EMPTY_TARGET,
-    sources: []
+    sourcePatterns: [],
+    sourceFolders: []
 }
 
 export const InputFilesReducer = createSlice({
@@ -30,12 +33,15 @@ export const InputFilesReducer = createSlice({
         setTargetProperty: (state, action) => {
             state.targetProperties = { ...state.targetProperties, [action.payload.field]: action.payload.value };
         },
-        setSources: (state, action) => {
-            state.sources = action.payload;
+        setSourcePatterns: (state, action) => {
+            state.sourcePatterns = action.payload;
+        },
+        setSourceFolders: (state, action) => {
+            state.sourceFolders = action.payload;
         }
     }
 })
 
-export const { setTargetProperties, setTargetProperty, setSources } = InputFilesReducer.actions;
+export const { setTargetProperties, setTargetProperty, setSourcePatterns, setSourceFolders } = InputFilesReducer.actions;
 
 export default InputFilesReducer.reducer;
