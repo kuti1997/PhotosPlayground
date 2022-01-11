@@ -2,7 +2,7 @@ import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 
 export const styles = createStyles({
     targetCard: {
-        padding: "5px 10px 5px 10px",
+        padding: "1vh 1vw 0 1vw",
         display: "flex",
         flexDirection: "column",
         border: "1px solid",

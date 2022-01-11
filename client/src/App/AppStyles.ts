@@ -5,14 +5,16 @@ export const styles = createStyles({
         textAlign: "center",
         background: "#9090e8",
         height: "100vh",
-        display: "flex"
+        display: "flex",
+        padding: "3vh 1.5vw"
     },
     leftPane: {
-        width: "54vw",
+        width: "43vw",
         display: "flex",
         flexDirection: "column",
-        paddingLeft: "35px",
-        paddingTop: "20px"
+    },
+    rightPane: {
+        width: "-webkit-fill-available"
     },
     simulateButtonDiv: {
         height: "100%",

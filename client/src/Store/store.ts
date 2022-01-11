@@ -5,7 +5,7 @@ import  InputFilesReducer from './Reducers/InputFilesReduer';
 export const store = configureStore({
     reducer: {
         changedFiles: changedFilesReducer,
-        inputFiles: InputFilesReducer
+        inputFiles: InputFilesReducer,
     }
 })
 

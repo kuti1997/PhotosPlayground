@@ -1,11 +1,12 @@
-import TargetPropertiesCard from '../Components/TargetPropertiesCard/TargetPropertiesCard';
 import { createTheme, ThemeProvider } from '@material-ui/core/styles';
-import { SourcesTable } from '../Components/SourcesTable/SourcesTable';
+import { SourcePatterns } from '../Components/SourcePatterns/SourcePaterns';
 import { useAppStyles } from './AppStyles';
 import ForwardIcon from '@material-ui/icons/Forward';
 import { IconButton } from '@material-ui/core';
 import { ChangedFilesList } from '../Components/ChangedFilesList/ChangedFilesList';
 import { useAppSelector } from '../Store/hooks';
+import { SourceFolders } from '../Components/SourceFolders/SourceFolders';
+import TargetCard from '../Components/TargetCard/TargetCard';
 
 const theme = createTheme({
   overrides: {
@@ -26,10 +27,11 @@ function App() {
   const classes = useAppStyles();
 
   const targetProperties = useAppSelector((state) => state.inputFiles.targetProperties);
-  const sources = useAppSelector((state) => state.inputFiles.sources);
+  const sourcePatterns = useAppSelector((state) => state.inputFiles.sourcePatterns);
+  const sourceFolders = useAppSelector((state) => state.inputFiles.sourceFolders);
 
   const onClickSimulate = () => {
-    (window as any).api.send("toMain", { targetProperties, sources });
+    (window as any).api.send("toMain", { targetProperties, sourcePatterns, sourceFolders });
   }
 
   (window as any).api.receive("fromMain", (data: string) => {
@@ -41,8 +43,8 @@ function App() {
       <div className={classes.app}>
 
         <div className={classes.leftPane}>
-          <TargetPropertiesCard />
-          <SourcesTable />
+          <TargetCard />
+          <SourceFolders />
         </div>
 
         <div className={classes.simulateButtonDiv}>
@@ -51,7 +53,9 @@ function App() {
           </IconButton>
         </div>
 
-        <ChangedFilesList />
+        <div className={classes.rightPane}>
+          <SourcePatterns />
+        </div>
 
       </div>
     </ThemeProvider>
