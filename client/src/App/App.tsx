@@ -27,11 +27,17 @@ function App() {
   const classes = useAppStyles();
 
   const targetProperties = useAppSelector((state) => state.inputFiles.targetProperties);
-  const sourcePatterns = useAppSelector((state) => state.inputFiles.sourcePatterns);
-  const sourceFolders = useAppSelector((state) => state.inputFiles.sourceFolders);
+  const sourcePatterns = useAppSelector((state) => state.inputFiles.sourcePatterns).map(sourcePattern => {
+    return {
+      namePattern: sourcePattern.namePattern,
+      datePattern: sourcePattern.datePattern,
+      sequenceLength: sourcePattern.sequenceLength
+    }
+  });
+  const sourceFolders = useAppSelector((state) => state.inputFiles.sourceFolders).map(sourceFolder => sourceFolder.path);
 
   const onClickSimulate = () => {
-    (window as any).api.send("toMain", { targetProperties, sourcePatterns, sourceFolders });
+    (window as any).api.send("toMain", { targetProperties, filePatterns: sourcePatterns, sourceFolderLocations: sourceFolders });
   }
 
   (window as any).api.receive("fromMain", (data: string) => {

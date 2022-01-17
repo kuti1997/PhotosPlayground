@@ -51,7 +51,7 @@ app.on('activate', () => {
   }
 });
 
-ipcMain.on("toMain", (_, args: PhotosInput) => {
-  const response = processPhotosConfig(args);
+ipcMain.on("toMain", async (_, args: PhotosInput) => {
+  const response = await processPhotosConfig(args);
   win.webContents.send("fromMain", response);
 });
