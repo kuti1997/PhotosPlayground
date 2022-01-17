@@ -1,6 +1,7 @@
 import { TableCell, TableRow, TextField } from "@material-ui/core";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { v4 } from "uuid";
+import { usePrevious } from "../../../utils/hooks";
 import { ChangeEvent, ColumnDefinition } from "../CommonTable";
 
 interface EmptyRowsProsp<T> {
@@ -26,6 +27,14 @@ export const EmptyRows = <T,>(props: EmptyRowsProsp<T>) => {
     const { getRowClassName, columnDefinitions, hasActionCell, onAddRow, tableCellStyle, numOfRows } = props;
 
     const [emptyRows, setEmptyRows] = useState(getNewEmptyRows(numOfRows));
+
+    const prevNumOfRows = usePrevious(numOfRows);
+
+    useEffect(() => {
+        if (prevNumOfRows !== undefined && prevNumOfRows < numOfRows) {
+            setEmptyRows([...emptyRows, v4()]);
+        }
+    }, [numOfRows]);
 
     const [focusedEmptyRow, setFocusedEmptyRow] = useState<FocusedEmptyRow<T>>({
         index: -1,

@@ -95,9 +95,6 @@ export class ImagePatternProcessor {
         const { regex, sequenceGroupIndex } = this.regexAndMatches;
         const date = await this.getImageDate(fileName, imagePath);
         const sequence = this.getSequenceFromImageName(fileName, regex, sequenceGroupIndex);
-        console.log(date);
-        console.log(sequence);
-        console.log(fileName);
         const isMissingProperty = !date || !sequence;
         return isMissingProperty ? null : { date, sequence };
     }
