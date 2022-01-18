@@ -19,6 +19,7 @@ export default function TargetPropertiesCard() {
     }
 
     return <div className={styleClasses.targetCard}>
+        <Typography className={`${styleClasses.whiteText} ${styleClasses.title}`}>Target Folder</Typography>
         {
             fields.map(field => {
                 const label = field.charAt(0).toUpperCase() + field.slice(1).replace(/([A-Z])/g, ' $1');

@@ -3,7 +3,7 @@ import { makeStyles, createStyles } from '@material-ui/core/styles';
 export const styles = createStyles({
     app: {
         textAlign: "center",
-        background: "#9090e8",
+        backgroundImage: "linear-gradient(to right, #4778a6 , #5b9bd5)",
         height: "100vh",
         display: "flex",
         padding: "3vh 1.5vw"
