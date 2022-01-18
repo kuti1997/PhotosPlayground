@@ -5,9 +5,10 @@ export const styles = createStyles({
         padding: "1vh 1vw 0 1vw",
         display: "flex",
         flexDirection: "column",
-        border: "1px solid",
+        border: "1px solid #6163ac",
         background: "#4472c4",
-        marginBottom: "20px"
+        marginBottom: "20px",
+        borderRadius: "11px"
     },
     targetProperty: {
         display: "flex",
@@ -26,6 +27,10 @@ export const styles = createStyles({
         color: "white",
         fontSize: "13px",
         fontWeight: "bold"
+    },
+    title: {
+        fontSize: "15px",
+        marginBottom: "1vh"
     }
 });
 
