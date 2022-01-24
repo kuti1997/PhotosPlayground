@@ -59,19 +59,22 @@ export class ImagePatternProcessor {
         if (imageExifDate)
             return imageExifDate;
 
-        const { regex, dateGroupIndex } = this.regexAndMatches;
-
         if (this.regexAndMatches.dateGroupIndex >= 0) {
-            return ImagePatternProcessor.getDateTakenFromImageName(imageName, regex, dateGroupIndex, this.datePattern);
+            return ImagePatternProcessor.getDateTakenFromImageName(imageName, this.regexAndMatches, this.datePattern);
         }
 
         console.error(`file ${imageName} doesn't have exif date and date patern doesn't exist`);
         return null;
     }
 
-    static getDateTakenFromImageName = (imageName: string, regex: string, dateGroupIndex: number, datePattern: string) => {
+    static getDateTakenFromImageName = (imageName: string, regexAndMatches: RegexAndMatches, datePattern: string) => {
+        const { regex, dateGroupIndex } = regexAndMatches;
+
         const dateMatches = imageName.match(regex);
-        return moment(dateMatches[dateGroupIndex].toString(), datePattern);
+        const date = dateMatches?.[dateGroupIndex];
+        return date
+            ? moment(date, datePattern)
+            : null;
     }
 
     getDateTakenFromEXIF = async (imagePath: string) => {
