@@ -3,27 +3,13 @@ import { useEffect, useState } from "react";
 import { v4 } from "uuid";
 import { usePrevious } from "../../../utils/hooks";
 import { ChangeEvent, ColumnDefinition } from "../CommonTable";
-
-interface EmptyRowsProsp<T> {
-    getRowClassName(index: number): string,
-    numOfRows: number,
-    columnDefinitions: ColumnDefinition<T>[],
-    hasActionCell: boolean,
-    onAddRow?(field: keyof T, value: string): void,
-    tableCellStyle: string
-}
-
-interface FocusedEmptyRow<T> {
-    index: number,
-    field: keyof T | null,
-    value: string
-}
-
-export const getNewEmptyRows = (numOfRows: number) => {
-    return [...Array(numOfRows)].map(_ => v4())
-}
+import { getNewEmptyRows } from "./EmptyRowsModels";
+import { EmptyRowsProsp, FocusedEmptyRow } from "./IEmptyRows";
+import { useEmptyRowsStyles } from "./useEmptyRowsStyles";
 
 export const EmptyRows = <T,>(props: EmptyRowsProsp<T>) => {
+    const classes = useEmptyRowsStyles();
+
     const { getRowClassName, columnDefinitions, hasActionCell, onAddRow, tableCellStyle, numOfRows } = props;
 
     const [emptyRows, setEmptyRows] = useState(getNewEmptyRows(numOfRows));
@@ -58,29 +44,31 @@ export const EmptyRows = <T,>(props: EmptyRowsProsp<T>) => {
         });
     }
 
+    const getTextFieldValue = (rowIndex: number, field: keyof T) => {
+        return focusedEmptyRow.index === rowIndex && focusedEmptyRow.field === field
+            ? focusedEmptyRow.value
+            : '';
+    }
+
     return <>
         {
             emptyRows.map((emptyRow: string, rowIndex: number) => {
                 return <TableRow key={emptyRow} className={getRowClassName(rowIndex)}>
-                    <>
-                        {
-                            columnDefinitions.map((columnDefinition, columnIndex: number) =>
-                                <TableCell key={columnIndex} className={tableCellStyle} >
-                                    {
-                                        columnDefinition.isEditable &&
-                                        <TextField value={focusedEmptyRow.index === rowIndex && focusedEmptyRow.field === columnDefinition.field
-                                            ? focusedEmptyRow.value
-                                            : ''}
-                                            onChange={(event: ChangeEvent) => onChangeEmptyRowCell(event, rowIndex, columnDefinition.field)}
-                                            onBlur={onBlur} />
-                                    }
-                                </TableCell>
-                            )
-                        }
-                        {
-                            hasActionCell && <TableCell className={tableCellStyle} />
-                        }
-                    </>
+                    {
+                        columnDefinitions.map((columnDefinition: ColumnDefinition<T>, columnIndex: number) =>
+                            <TableCell key={columnIndex} className={tableCellStyle} >
+                                {
+                                    columnDefinition.isEditable &&
+                                    <TextField className={classes.textField} value={getTextFieldValue(rowIndex, columnDefinition.field)}
+                                        onChange={(event: ChangeEvent) => onChangeEmptyRowCell(event, rowIndex, columnDefinition.field)}
+                                        onBlur={onBlur} />
+                                }
+                            </TableCell>
+                        )
+                    }
+                    {
+                        hasActionCell && <TableCell className={tableCellStyle} />
+                    }
                 </TableRow>
             })
         }

@@ -16,3 +16,14 @@ export interface SourceFolder {
     path: string,
     id: string
 }
+
+export interface ServerInputFormat {
+    targetProperties: Target,
+    filePatterns: FilePattern[],
+    sourceFolderLocations: string[]
+}
+
+export interface ChangedImage {
+    originPath: string,
+    newPath: string
+}

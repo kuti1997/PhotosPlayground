@@ -1,12 +1,10 @@
 import { createTheme, ThemeProvider } from '@material-ui/core/styles';
 import { SourcePatterns } from '../Components/SourcePatterns/SourcePaterns';
 import { useAppStyles } from './AppStyles';
-import ForwardIcon from '@material-ui/icons/Forward';
-import { IconButton } from '@material-ui/core';
-import { ChangedFilesList } from '../Components/ChangedFilesList/ChangedFilesList';
-import { useAppSelector } from '../Store/hooks';
 import { SourceFolders } from '../Components/SourceFolders/SourceFolders';
 import TargetCard from '../Components/TargetCard/TargetCard';
+import { SimulationButton } from '../Components/SimulationButton/SimulationButton';
+import { useReceiveFromServer } from '../ServerApiHooks/useReceiveFromServer';
 
 const theme = createTheme({
   overrides: {
@@ -19,30 +17,14 @@ const theme = createTheme({
       head: {
         textAlign: "left"
       }
-    },
+    }
   }
 });
 
 function App() {
   const classes = useAppStyles();
 
-  const targetProperties = useAppSelector((state) => state.inputFiles.targetProperties);
-  const sourcePatterns = useAppSelector((state) => state.inputFiles.sourcePatterns).map(sourcePattern => {
-    return {
-      namePattern: sourcePattern.namePattern,
-      datePattern: sourcePattern.datePattern,
-      sequenceLength: sourcePattern.sequenceLength
-    }
-  });
-  const sourceFolders = useAppSelector((state) => state.inputFiles.sourceFolders).map(sourceFolder => sourceFolder.path);
-
-  const onClickSimulate = () => {
-    (window as any).api.send("toMain", { targetProperties, filePatterns: sourcePatterns, sourceFolderLocations: sourceFolders });
-  }
-
-  (window as any).api.receive("fromMain", (data: string) => {
-    console.log(`Received ${data} from main process`);
-  });
+  useReceiveFromServer();
 
   return (
     <ThemeProvider theme={theme}>
@@ -54,9 +36,7 @@ function App() {
         </div>
 
         <div className={classes.simulateButtonDiv}>
-          <IconButton className={classes.simulateButton} onClick={onClickSimulate}>
-            <ForwardIcon />
-          </IconButton>
+          <SimulationButton />
         </div>
 
         <div className={classes.rightPane}>

@@ -1,6 +1,6 @@
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 
-export const styles = createStyles({
+export const useStyles = makeStyles({
     targetCard: {
         padding: "1vh 1vw 0 1vw",
         display: "flex",
@@ -33,5 +33,3 @@ export const styles = createStyles({
         marginBottom: "1vh"
     }
 });
-
-export const useStyles = makeStyles(() => styles);
