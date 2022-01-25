@@ -1,12 +1,12 @@
 import { TextField, Typography } from '@material-ui/core';
-import { useStyles } from "./styles";
+import { useTargetCardStyles } from "./styles";
 import { Target } from "shared-modules";
 import { useAppDispatch, useAppSelector } from "../../Store/hooks";
 import { setTargetProperty } from "../../Store/Reducers/InputFilesReduer";
 import React from 'react';
 
 export default function TargetPropertiesCard() {
-    const styleClasses = useStyles();
+    const classes = useTargetCardStyles();
 
     const dispatch = useAppDispatch();
 
@@ -18,16 +18,16 @@ export default function TargetPropertiesCard() {
         dispatch(setTargetProperty({ field, value }));
     }
 
-    return <div className={styleClasses.targetCard}>
-        <Typography className={`${styleClasses.whiteText} ${styleClasses.title}`}>Target Folder</Typography>
+    return <div className={classes.targetCard}>
+        <Typography className={`${classes.whiteText} ${classes.title}`}>Target Folder</Typography>
         {
             fields.map(field => {
                 const label = field.charAt(0).toUpperCase() + field.slice(1).replace(/([A-Z])/g, ' $1');
                 return <React.Fragment key={field}>
-                    <div className={styleClasses.targetProperty}>
-                        <Typography className={styleClasses.whiteText}>{label}</Typography>
-                        <TextField inputProps={{ className: styleClasses.innerInput }}
-                            className={styleClasses.globalTextField}
+                    <div className={classes.targetProperty}>
+                        <Typography className={classes.whiteText}>{label}</Typography>
+                        <TextField inputProps={{ className: classes.innerInput }}
+                            className={classes.globalTextField}
                             onChange={event => changeFieldValue(event.target.value, field)}
                             value={target[field]}
                             variant="outlined" />
@@ -35,12 +35,12 @@ export default function TargetPropertiesCard() {
                 </React.Fragment>
             })
         }
-        
-        <div className={styleClasses.targetProperty}>
-            <Typography className={styleClasses.whiteText}>Sequence Length</Typography>
-            <TextField inputProps={{ className: styleClasses.innerInput }}
+
+        <div className={classes.targetProperty}>
+            <Typography className={classes.whiteText}>Sequence Length</Typography>
+            <TextField inputProps={{ className: classes.innerInput }}
                 variant="outlined"
-                className={styleClasses.globalTextField}
+                className={classes.globalTextField}
                 value={target.sequenceLength}
                 onChange={event => changeFieldValue(event.target.value, "sequenceLength")} />
         </div>

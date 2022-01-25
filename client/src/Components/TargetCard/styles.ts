@@ -1,6 +1,6 @@
 import { makeStyles } from '@material-ui/core/styles';
 
-export const useStyles = makeStyles({
+export const useTargetCardStyles = makeStyles({
     targetCard: {
         padding: "1vh 1vw 0 1vw",
         display: "flex",

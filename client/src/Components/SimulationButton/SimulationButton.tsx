@@ -3,7 +3,7 @@ import { IconButton } from '@material-ui/core';
 import { useAppSelector } from '../../Store/hooks';
 import { ServerInputFormat } from 'shared-modules';
 import { useSentToServer } from '../../ServerApiHooks/useSendToServer';
-import { useSimulationButtonStyles } from './useSimulationButtonStyles';
+import { useSimulationButtonStyles } from './styles';
 
 export const SimulationButton = () => {
     const classes = useSimulationButtonStyles();

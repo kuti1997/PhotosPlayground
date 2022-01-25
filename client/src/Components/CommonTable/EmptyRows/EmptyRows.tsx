@@ -5,7 +5,7 @@ import { usePrevious } from "../../../utils/hooks";
 import { ChangeEvent, ColumnDefinition } from "../CommonTable";
 import { getNewEmptyRows } from "./EmptyRowsModels";
 import { EmptyRowsProsp, FocusedEmptyRow } from "./IEmptyRows";
-import { useEmptyRowsStyles } from "./useEmptyRowsStyles";
+import { useEmptyRowsStyles } from "./styles";
 
 export const EmptyRows = <T,>(props: EmptyRowsProsp<T>) => {
     const classes = useEmptyRowsStyles();

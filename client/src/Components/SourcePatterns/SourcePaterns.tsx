@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { ColumnDefinition, CommonTable } from "../CommonTable/CommonTable";
-import { useSourcesTableStyles } from "./SourcePatternsStyles";
+import { useSourcesTableStyles } from "./styles";
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import { SourcePatternDialog } from "./SourcePatternDialog/SourcePatternDialog";

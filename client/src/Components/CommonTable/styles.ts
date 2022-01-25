@@ -1,6 +1,6 @@
-import { makeStyles, createStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 
-export const styles = createStyles({
+export const useCommonTabletyles = makeStyles({
     tableHeadRow: {
         background: "#4472c4",
         "& > th": {
@@ -21,5 +21,3 @@ export const styles = createStyles({
         background: "#cfd5ea"
     }
 });
-
-export const useCommonTabletyles = makeStyles(() => styles);
