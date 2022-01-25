@@ -1,6 +1,6 @@
 import { createTheme, ThemeProvider } from '@material-ui/core/styles';
 import { SourcePatterns } from '../Components/SourcePatterns/SourcePaterns';
-import { useAppStyles } from './AppStyles';
+import { useAppStyles } from './styles';
 import { SourceFolders } from '../Components/SourceFolders/SourceFolders';
 import TargetCard from '../Components/TargetCard/TargetCard';
 import { SimulationButton } from '../Components/SimulationButton/SimulationButton';

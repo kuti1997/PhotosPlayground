@@ -1,6 +1,6 @@
-import { makeStyles, createStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 
-export const styles = createStyles({
+export const useAppStyles = makeStyles({
     app: {
         textAlign: "center",
         backgroundImage: "linear-gradient(to right, #4778a6 , #5b9bd5)",
@@ -24,5 +24,3 @@ export const styles = createStyles({
         margin: "auto"
     }
 });
-
-export const useAppStyles = makeStyles(() => styles);

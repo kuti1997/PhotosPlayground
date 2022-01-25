@@ -1,5 +1,5 @@
 import { ColumnDefinition, CommonTable } from "../CommonTable/CommonTable";
-import { useSourcesTableStyles } from "./SourcePatternsStyles";
+import { useSourcesTableStyles } from "./styles";
 import { useAppDispatch, useAppSelector } from "../../Store/hooks";
 import { setSourceFolders } from "../../Store/Reducers/InputFilesReduer";
 import { SourceFolder } from "shared-modules";

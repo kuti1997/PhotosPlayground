@@ -1,6 +1,6 @@
 import { TableBody, TableHead } from "@material-ui/core";
 import { Table, TableCell, TableRow } from "@material-ui/core";
-import { useCommonTabletyles } from "./CommonTableStyles";
+import { useCommonTabletyles } from "./styles";
 import { CommonTableRow } from "./CommonTableRow/CommonTableRow";
 import { EmptyRows } from "./EmptyRows/EmptyRows";
 import { DEFAULT_MIN_ROWS } from "./models";

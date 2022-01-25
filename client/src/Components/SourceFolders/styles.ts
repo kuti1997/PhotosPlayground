@@ -1,6 +1,6 @@
-import { makeStyles, createStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 
-export const styles = createStyles({
+export const useSourcesTableStyles = makeStyles({
     header: {
         background: "#4472c4"
     },
@@ -13,5 +13,3 @@ export const styles = createStyles({
         width: "inherit"
     }
 });
-
-export const useSourcesTableStyles = makeStyles(() => styles);

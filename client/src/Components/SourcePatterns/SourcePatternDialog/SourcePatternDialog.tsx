@@ -1,7 +1,7 @@
 import { Button, Dialog, DialogTitle, TextField } from '@material-ui/core';
 import { useState } from 'react';
 import { SourcePattern } from 'shared-modules';
-import { useAddSourceDialogStyles } from './SourcePatternStyles';
+import { useAddSourceDialogStyles } from './styles';
 import { convertCamelCaseToInitialCaps, getSortedDialogFields, isNamePatternValid } from './models';
 
 interface SourcePatternDialogProps {
