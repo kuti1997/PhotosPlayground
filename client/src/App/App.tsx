@@ -5,6 +5,8 @@ import { SourceFolders } from '../Components/SourceFolders/SourceFolders';
 import TargetCard from '../Components/TargetCard/TargetCard';
 import { SimulationButton } from '../Components/SimulationButton/SimulationButton';
 import { useReceiveFromServer } from '../ServerApiHooks/useReceiveFromServer';
+import { useAppSelector } from '../Store/hooks';
+import { ChangedImagesDialog } from '../Components/ChangedImagesDialog/ChangedImagesDialog';
 
 const theme = createTheme({
   overrides: {
@@ -23,6 +25,7 @@ const theme = createTheme({
 
 function App() {
   const classes = useAppStyles();
+  const changedImages = useAppSelector((state) => state.changedFiles.changedFiles);
 
   useReceiveFromServer();
 
@@ -38,6 +41,11 @@ function App() {
         <div className={classes.simulateButtonDiv}>
           <SimulationButton />
         </div>
+
+        {
+          changedImages.length > 0 &&
+          <ChangedImagesDialog />
+        }
 
         <div className={classes.rightPane}>
           <SourcePatterns />

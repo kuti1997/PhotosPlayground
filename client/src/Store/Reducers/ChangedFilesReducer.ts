@@ -1,13 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { ChangedFile } from '../../Components/ChangedFilesList/ChangedFilesList';
+import { ChangedImage } from 'shared-modules';
 
 // Define a type for the slice state
-interface CounterState {
-    changedFiles: ChangedFile[]
+interface ChangedImagesReducer {
+    changedFiles: ChangedImage[]
 }
 
 // Define the initial state using that type
-const initialState: CounterState = {
+const initialState: ChangedImagesReducer = {
     changedFiles: []
 }
 
