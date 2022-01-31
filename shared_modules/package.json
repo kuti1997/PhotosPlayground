@@ -2,8 +2,10 @@
   "name": "shared-modules",
   "version": "1.0.0",
   "description": "",
-  "main": "./src/Types.ts",
+  "main": "dist/Types.js",
+  "types": "dist/Types.d.ts",
   "scripts": {
+    "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
