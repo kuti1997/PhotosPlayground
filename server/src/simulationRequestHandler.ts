@@ -1,11 +1,11 @@
-import { ChangedImage, ServerInputFormat } from "shared-modules";
+import { ChangedImage, GetSimulationRequest } from "shared-modules";
 import fs from 'fs';
 import { getImagePath, getNewImageName, sortImages } from "./utils/fileUtils";
 import { ImagePatternProcessor } from "./utils/ImagePatternProcessor";
 import { ImageMetadata } from "./models/image.model";
 
-export async function processPhotosConfig(serverInputFormat: ServerInputFormat): Promise<ChangedImage[]> {
-    const { targetProperties, sourceFolderLocations, filePatterns } = serverInputFormat;
+export async function processPhotosConfig(request: GetSimulationRequest): Promise<ChangedImage[]> {
+    const { targetProperties, sourceFolderLocations, filePatterns } = request;
 
     let allPhotos: ImageMetadata[] = [];
 
@@ -16,6 +16,7 @@ export async function processPhotosConfig(serverInputFormat: ServerInputFormat):
         for (const imageName of imageNames) {
             const imagePath = getImagePath(sourceFolderLocation, imageName);
             const imageMetadata = await getImageMetadata(imagePatternProcessors, imageName, imagePath);
+
             if (!imageMetadata) {
                 console.log(`image ${imagePath} doesn't match any pattern`);
             }

@@ -1,9 +1,10 @@
 import { BrowserWindow } from "electron";
 import path from 'path';
-import { processPhotosConfig } from './src/photosHandler';
+import { processPhotosConfig } from './src/simulationRequestHandler';
 import { app, ipcMain } from 'electron';
 import isDev from 'electron-is-dev';
-import { ServerInputFormat } from "shared-modules";
+import { ApplySimulationRequest, GetSimulationRequest, SEND_TO_CLIENT_CHANNELS, SEND_TO_SERVER_CHANNELS } from "shared-modules";
+import { applySimulationRequest } from "./src/applySimulationRequestHandler";
 
 let win: BrowserWindow;
 
@@ -51,10 +52,20 @@ app.on('activate', () => {
   }
 });
 
-ipcMain.on("toMain", async (_, args: ServerInputFormat) => {
+ipcMain.on(SEND_TO_SERVER_CHANNELS.GET_SIMULATION, async (_, request: GetSimulationRequest) => {
   try {
-    const response = await processPhotosConfig(args);
-    win.webContents.send("fromMain", response);
+    const response = await processPhotosConfig(request);
+    win.webContents.send(SEND_TO_CLIENT_CHANNELS.SIMULATION_RESULTS, response);
+  }
+  catch (e) {
+    console.log(e);
+  }
+});
+
+ipcMain.on(SEND_TO_SERVER_CHANNELS.APPLY_SIMULATION, (_, request: ApplySimulationRequest) => {
+  try {
+    const response = applySimulationRequest(request);
+    win.webContents.send(SEND_TO_CLIENT_CHANNELS.SIMULATION_RESULTS, response);
   }
   catch (e) {
     console.log(e);

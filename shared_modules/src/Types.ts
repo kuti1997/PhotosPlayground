@@ -1,9 +1,12 @@
-export interface SourcePattern extends FilePattern {
-    id: string
+export const SEND_TO_SIMULATION_CHANNEL_NAME = "SIMULATE_IMAGES";
+
+export const SEND_TO_SERVER_CHANNELS = {
+    GET_SIMULATION: "GET_SIMULATION",
+    APPLY_SIMULATION: "APPLY_SIMULATION"
 }
 
-export interface Target extends FilePattern {
-    outputFolderLocation: string,
+export const SEND_TO_CLIENT_CHANNELS = {
+    SIMULATION_RESULTS: "SIMULATION_RESULTS"
 }
 
 export interface FilePattern {
@@ -12,15 +15,27 @@ export interface FilePattern {
     sequenceLength: number
 }
 
+export interface SourcePattern extends FilePattern {
+    id: string
+}
+
+export interface Target extends FilePattern {
+    outputFolderLocation: string,
+}
+
 export interface SourceFolder {
     path: string,
     id: string
 }
 
-export interface ServerInputFormat {
+export interface GetSimulationRequest {
     targetProperties: Target,
     filePatterns: FilePattern[],
     sourceFolderLocations: string[]
+}
+
+export interface ApplySimulationRequest {
+    changedImages: ChangedImage[]
 }
 
 export interface ChangedImage {
