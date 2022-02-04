@@ -1,4 +1,4 @@
-import { BrowserWindow } from "electron";
+import { BrowserWindow, remote } from "electron";
 import path from 'path';
 import { processPhotosConfig } from './src/simulationRequestHandler';
 import { app, ipcMain } from 'electron';
@@ -11,12 +11,13 @@ let win: BrowserWindow;
 function createWindow() {
   // Create the browser window.
   win = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1000,
+    height: 550,
     webPreferences: {
       nodeIntegration: true,
       preload: path.join(__dirname, "preload.js")
     },
+    frame: false
   });
 
   // and load the index.html of the app.
@@ -70,4 +71,9 @@ ipcMain.on(SEND_TO_SERVER_CHANNELS.APPLY_SIMULATION, (_, request: ApplySimulatio
   catch (e) {
     console.log(e);
   }
+});
+
+ipcMain.on(SEND_TO_SERVER_CHANNELS.CLOSE_SERVER, () => {
+  console.log("Aaa")
+  win.destroy();
 });

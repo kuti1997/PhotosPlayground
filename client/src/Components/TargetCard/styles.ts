@@ -7,12 +7,12 @@ export const useTargetCardStyles = makeStyles({
         flexDirection: "column",
         border: "1px solid #6163ac",
         background: "#4472c4",
-        marginBottom: "20px",
+        marginBottom: "3vh",
         borderRadius: "11px"
     },
     targetProperty: {
         display: "flex",
-        height: "35px"
+        height: "7vh"
     },
     globalTextField: {
         marginLeft: "auto",
@@ -30,6 +30,7 @@ export const useTargetCardStyles = makeStyles({
     },
     title: {
         fontSize: "15px",
-        marginBottom: "1vh"
+        marginBottom: "1vh",
+        height: "5vh"
     }
 });

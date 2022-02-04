@@ -12,12 +12,11 @@ export const useCommonTabletyles = makeStyles({
         }
     },
     tableCell: {
-        border: "1px white solid"
     },
     oddTableCellColor: {
-        background: "#e9ebf5"
+        background: "#9faffd"
     },
     evenTableCellColor: {
-        background: "#cfd5ea"
+        background: "#a5b9ff"
     }
 });

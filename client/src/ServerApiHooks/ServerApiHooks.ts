@@ -25,3 +25,8 @@ export const useSendSimulationToServer = () => {
         (window as any).api.send(SEND_TO_SERVER_CHANNELS.APPLY_SIMULATION, applySimulationRequest);
     }
 }
+
+export const sendCloseMessage = () => {
+    console.log("aaa");
+    (window as any).api.send(SEND_TO_SERVER_CHANNELS.CLOSE_SERVER,{});
+}
