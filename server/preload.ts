@@ -1,9 +1,10 @@
 import { contextBridge, ipcRenderer } from "electron";
+import { SEND_TO_SERVER_CHANNELS } from "shared-modules";
 
 contextBridge.exposeInMainWorld("api", {
     send: (channel, data) => {
         // whitelist channels
-        let validChannels = ["toMain"];
+        let validChannels = Object.values(SEND_TO_SERVER_CHANNELS);
         if (validChannels.includes(channel)) {
             ipcRenderer.send(channel, data);
         }

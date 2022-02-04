@@ -10,6 +10,7 @@ export const useSourcesTableStyles = makeStyles({
         fontSize: "13px"
     },
     tableDiv: {
-        width: "inherit"
+        width: "inherit",
+        height: "calc(55.8vh - 31px)"
     }
 });

@@ -58,7 +58,7 @@ export const CommonTable = <T,>(props: CommonTableProps<T>) => {
                     }
                     {
                         hasActionCell && <TableCell className={classes.tableCell} >
-                            Actions
+                            
                         </TableCell>
                     }
                 </>

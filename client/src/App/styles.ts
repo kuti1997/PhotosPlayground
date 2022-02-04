@@ -4,7 +4,6 @@ export const useAppStyles = makeStyles({
     app: {
         textAlign: "center",
         backgroundImage: "linear-gradient(to right, #4778a6 , #5b9bd5)",
-        height: "100vh",
         display: "flex",
         padding: "3vh 1.5vw"
     },
