@@ -27,6 +27,9 @@ export const useSendSimulationToServer = () => {
 }
 
 export const sendCloseMessage = () => {
-    console.log("aaa");
-    (window as any).api.send(SEND_TO_SERVER_CHANNELS.CLOSE_SERVER,{});
+    (window as any).api.send(SEND_TO_SERVER_CHANNELS.CLOSE_SERVER);
+}
+
+export const sendMinimizeMessage = () => {
+    (window as any).api.send(SEND_TO_SERVER_CHANNELS.MINIMIZE);
 }

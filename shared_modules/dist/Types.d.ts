@@ -3,6 +3,7 @@ export declare const SEND_TO_SERVER_CHANNELS: {
     GET_SIMULATION: string;
     APPLY_SIMULATION: string;
     CLOSE_SERVER: string;
+    MINIMIZE: string;
 };
 export declare const SEND_TO_CLIENT_CHANNELS: {
     SIMULATION_RESULTS: string;

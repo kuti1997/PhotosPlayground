@@ -74,6 +74,9 @@ ipcMain.on(SEND_TO_SERVER_CHANNELS.APPLY_SIMULATION, (_, request: ApplySimulatio
 });
 
 ipcMain.on(SEND_TO_SERVER_CHANNELS.CLOSE_SERVER, () => {
-  console.log("Aaa")
   win.destroy();
+});
+
+ipcMain.on(SEND_TO_SERVER_CHANNELS.MINIMIZE, () => {
+  win.minimize();
 });

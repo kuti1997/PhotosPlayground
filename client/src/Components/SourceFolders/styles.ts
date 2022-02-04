@@ -11,6 +11,6 @@ export const useSourcesTableStyles = makeStyles({
     },
     tableDiv: {
         width: "inherit",
-        height: "calc(55.8vh - 25px)"
+        height: "calc(55.8vh - 31px)"
     }
 });
