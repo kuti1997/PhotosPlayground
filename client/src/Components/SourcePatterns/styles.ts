@@ -11,5 +11,8 @@ export const useSourcesTableStyles = makeStyles({
     },
     tableDiv: {
         width: "inherit"
+    },
+    addButton: {
+        background: "transparent !important"
     }
 });

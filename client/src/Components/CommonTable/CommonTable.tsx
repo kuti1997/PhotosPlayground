@@ -4,25 +4,9 @@ import { useCommonTabletyles } from "./styles";
 import { CommonTableRow } from "./CommonTableRow/CommonTableRow";
 import { EmptyRows } from "./EmptyRows/EmptyRows";
 import { DEFAULT_MIN_ROWS } from "./models";
-
-export interface ColumnDefinition<T> {
-    field: keyof T,
-    text: string,
-    isEditable?: boolean
-}
-
-interface CommonTableProps<T> {
-    minRows?: number,
-    rows: T[],
-    columnDefinitions: ColumnDefinition<T>[],
-    getKeyFromRow(row: T): string,
-    onDeleteRow?(id: string): void,
-    onEditRow?(id: string, field: keyof T, value: string): void,
-    onClickEdit?(row: T): void,
-    onAddRow?(field: keyof T, value: string): void
-}
-
-export type ChangeEvent = React.ChangeEvent<HTMLInputElement>;
+import Pagination from '@mui/material/Pagination';
+import { ChangeEvent, CommonTableProps } from "./ICommonTable";
+import { useState } from "react";
 
 export const CommonTable = <T,>(props: CommonTableProps<T>) => {
     const classes = useCommonTabletyles();
@@ -46,48 +30,62 @@ export const CommonTable = <T,>(props: CommonTableProps<T>) => {
         return isOddIndex ? classes.oddTableCellColor : classes.evenTableCellColor;
     }
 
-    return <Table>
-        <TableHead>
-            <TableRow className={classes.tableHeadRow}>
-                <>
-                    {
-                        props.columnDefinitions.map(columnDefinition =>
-                            <TableCell key={columnDefinition.field.toString()} className={classes.tableCell}>
-                                {columnDefinition.text}
-                            </TableCell>)
-                    }
-                    {
-                        hasActionCell && <TableCell className={classes.tableCell} >
-                            
-                        </TableCell>
-                    }
-                </>
-            </TableRow>
-        </TableHead>
-        <TableBody>
-            {
-                props.rows.map((row, rowIndex) =>
-                    <CommonTableRow key={props.getKeyFromRow(row)} row={row}
-                        rowClassName={getRowClassName(rowIndex)}
-                        cellClassName={classes.tableCell}
+    const numberOfPages = Math.max(1, Math.ceil(props.rows.length / minRows));
+
+    const [pageNumber, setPageNumber] = useState(1);
+
+    const onChangePageNumber = (_: any, pageNumber: number) => {
+        setPageNumber(pageNumber);
+    }
+
+    const rowsToShow = props.rows.slice((pageNumber - 1) * minRows, (pageNumber - 1) * minRows + minRows);
+
+    return <>
+        <Table>
+            <TableHead>
+                <TableRow className={classes.tableHeadRow}>
+                    <>
+                        {
+                            props.columnDefinitions.map(columnDefinition =>
+                                <TableCell key={columnDefinition.field.toString()} className={classes.tableCell}>
+                                    {columnDefinition.text}
+                                </TableCell>)
+                        }
+                        {
+                            hasActionCell && <TableCell className={classes.tableCell} />
+                        }
+                    </>
+                </TableRow>
+            </TableHead>
+            <TableBody>
+                {
+                    rowsToShow.map((row, rowIndex) =>
+                        <CommonTableRow key={props.getKeyFromRow(row)} row={row}
+                            rowClassName={getRowClassName(rowIndex)}
+                            cellClassName={classes.tableCell}
+                            columnDefinitions={props.columnDefinitions}
+                            getKeyFromRow={props.getKeyFromRow}
+                            onDeleteRow={props.onDeleteRow}
+                            onChangeField={onChangeField}
+                            onClickEdit={props.onClickEdit} />
+                    )
+                }
+
+                {
+                    numOfEmptyRows > 0 &&
+                    <EmptyRows getRowClassName={getEmptyRowClassName}
+                        numOfRows={numOfEmptyRows}
                         columnDefinitions={props.columnDefinitions}
-                        getKeyFromRow={props.getKeyFromRow}
-                        onDeleteRow={props.onDeleteRow}
-                        onChangeField={onChangeField}
-                        onClickEdit={props.onClickEdit} />
-                )
-            }
+                        hasActionCell={hasActionCell}
+                        onAddRow={props.onAddRow}
+                        tableCellStyle={classes.tableCell} />
+                }
+            </TableBody>
+        </Table>
 
-            {
-                numOfEmptyRows > 0 &&
-                <EmptyRows getRowClassName={getEmptyRowClassName}
-                    numOfRows={numOfEmptyRows}
-                    columnDefinitions={props.columnDefinitions}
-                    hasActionCell={hasActionCell}
-                    onAddRow={props.onAddRow}
-                    tableCellStyle={classes.tableCell} />
-            }
-
-        </TableBody>
-    </Table>
+        <div className={classes.paginationRow}>
+            <Pagination count={numberOfPages} page={pageNumber} onChange={onChangePageNumber} className={classes.pagination} />
+            {props.addButton}
+        </div>
+    </>
 }

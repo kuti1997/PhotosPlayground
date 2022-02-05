@@ -1,9 +1,10 @@
-import { ColumnDefinition, CommonTable } from "../CommonTable/CommonTable";
+import { CommonTable } from "../CommonTable/CommonTable";
 import { useSourcesTableStyles } from "./styles";
 import { useAppDispatch, useAppSelector } from "../../Store/hooks";
 import { setSourceFolders } from "../../Store/Reducers/InputFilesReduer";
 import { SourceFolder } from "shared-modules";
 import { v4 as uuidv4 } from 'uuid';
+import { ColumnDefinition } from "../CommonTable/ICommonTable";
 
 export const SourceFolders = () => {
     const dispatch = useAppDispatch();
