@@ -18,5 +18,12 @@ export const useCommonTabletyles = makeStyles({
     },
     evenTableCellColor: {
         background: "#a5b9ff"
+    },
+    paginationRow: {
+        display: "flex",
+        background: "#9faffd"
+    },
+    pagination: {
+        margin: "auto",
     }
 });

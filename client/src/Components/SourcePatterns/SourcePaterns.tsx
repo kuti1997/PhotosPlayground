@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ColumnDefinition, CommonTable } from "../CommonTable/CommonTable";
+import { CommonTable } from "../CommonTable/CommonTable";
 import { useSourcesTableStyles } from "./styles";
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
@@ -8,6 +8,7 @@ import { useAppDispatch, useAppSelector } from "../../Store/hooks";
 import { setSourcePatterns } from "../../Store/Reducers/InputFilesReduer";
 import { SourcePattern } from "shared-modules";
 import { v4 as uuidv4 } from 'uuid';
+import { ColumnDefinition } from "../CommonTable/ICommonTable";
 
 export const getEmptySource = (): SourcePattern => {
     return {
@@ -72,7 +73,8 @@ export const SourcePatterns = () => {
         const newSources = [
             ...sourcePatterns.slice(0, sourceIndex),
             source,
-            ...sourcePatterns.slice(sourceIndex + 1)];
+            ...sourcePatterns.slice(sourceIndex + 1)
+        ];
 
         dispatch(setSourcePatterns(newSources))
     }
@@ -88,11 +90,11 @@ export const SourcePatterns = () => {
 
     return <div className={classes.tableDiv} >
         <CommonTable columnDefinitions={columnsDefinition} rows={sourcePatterns} getKeyFromRow={getSourceId}
-            onDeleteRow={onDeleteSource} onClickEdit={onEditSourceClick} />
-
-        <Fab color="primary" aria-label="add" onClick={onAddSourceClick}>
-            <AddIcon />
-        </Fab>
+            onDeleteRow={onDeleteSource} onClickEdit={onEditSourceClick}
+            addButton={<Fab color="primary" aria-label="add" onClick={onAddSourceClick} className={classes.addButton}>
+                <AddIcon />
+            </Fab>}
+        />
 
         {
             isDialogOpen &&

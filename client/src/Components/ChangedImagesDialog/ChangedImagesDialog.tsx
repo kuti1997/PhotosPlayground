@@ -2,7 +2,8 @@ import { Button, Dialog } from "@material-ui/core"
 import { ChangedImage } from "shared-modules";
 import { useSendSimulationToServer } from "../../ServerApiHooks/ServerApiHooks";
 import { useAppSelector } from "../../Store/hooks";
-import { ColumnDefinition, CommonTable } from "../CommonTable/CommonTable"
+import { CommonTable } from "../CommonTable/CommonTable"
+import { ColumnDefinition } from "../CommonTable/ICommonTable";
 
 export const ChangedImagesDialog = () => {
     const sendToServer = useSendSimulationToServer();

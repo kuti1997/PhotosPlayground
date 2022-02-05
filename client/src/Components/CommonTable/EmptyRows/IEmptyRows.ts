@@ -1,4 +1,4 @@
-import { ColumnDefinition } from "../CommonTable";
+import { ColumnDefinition } from "../ICommonTable";
 
 export interface EmptyRowsProsp<T> {
     getRowClassName(index: number): string,

@@ -2,7 +2,7 @@ import { TableCell, TableRow, TextField } from "@material-ui/core";
 import { useEffect, useState } from "react";
 import { v4 } from "uuid";
 import { usePrevious } from "../../../utils/hooks";
-import { ChangeEvent, ColumnDefinition } from "../CommonTable";
+import { ChangeEvent, ColumnDefinition } from "../ICommonTable";
 import { getNewEmptyRows } from "./EmptyRowsModels";
 import { EmptyRowsProsp, FocusedEmptyRow } from "./IEmptyRows";
 import { useEmptyRowsStyles } from "./styles";
