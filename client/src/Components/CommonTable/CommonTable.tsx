@@ -23,7 +23,6 @@ export const CommonTable = <T,>(props: CommonTableProps<T>) => {
     const hasActionCell = Boolean(props.onClickEdit || props.onDeleteRow);
 
     const minRows = props.minRows ?? DEFAULT_MIN_ROWS;
-    const numOfEmptyRows = Math.max(minRows - props.rows.length, 0);
 
     const getEmptyRowClassName = (rowIndex: number) => {
         const isOddIndex = (props.rows.length + rowIndex) % 2 === 1;
@@ -39,6 +38,7 @@ export const CommonTable = <T,>(props: CommonTableProps<T>) => {
     }
 
     const rowsToShow = props.rows.slice((pageNumber - 1) * minRows, (pageNumber - 1) * minRows + minRows);
+    const numOfEmptyRows = Math.max(minRows - rowsToShow.length, 0);
 
     return <>
         <Table>
