@@ -17,8 +17,11 @@ export const EmptyRows = <T,>(props: EmptyRowsProsp<T>) => {
     const prevNumOfRows = usePrevious(numOfRows);
 
     useEffect(() => {
-        if (prevNumOfRows !== undefined && prevNumOfRows < numOfRows) {
-            setEmptyRows([...emptyRows, v4()]);
+        if (prevNumOfRows !== undefined) {
+            prevNumOfRows < numOfRows
+                ? setEmptyRows([...emptyRows, v4()])
+                : setEmptyRows(emptyRows.slice(1, emptyRows.length))
+
         }
     }, [numOfRows]);
 
