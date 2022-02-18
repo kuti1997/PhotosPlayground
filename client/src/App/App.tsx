@@ -7,7 +7,7 @@ import { useAppSelector } from '../Store/hooks';
 import { ChangedImagesDialog } from '../Components/ChangedImagesDialog/ChangedImagesDialog';
 import { useReceiveFromServer, useSendToServer } from '../ServerApiHooks/ServerApiHooks';
 import { appTheme } from './theme';
-import { IconButton } from '@material-ui/core';
+import { Box, Button, IconButton, Step, StepLabel, Stepper } from '@mui/material';
 import ForwardIcon from '@material-ui/icons/Forward';
 import { getTargetPropertiesValid, SimulationInputError } from './utils';
 import { GetSimulationRequest } from 'shared-modules';
@@ -44,35 +44,61 @@ function App() {
     setTargetError(SimulationInputError.NO_ERROR);
   }
 
+  const [activeStep, setActiveStep] = useState(0);
+
+  const steps = [
+    {
+      label: 'Select Input Folders', component: <SourceFolders />
+    },
+    {
+      label: 'Select Input Patters', component: <SourcePatterns />
+    },
+    {
+      label: 'Select Target Folder', component: <TargetCard />
+    }
+  ];
+
+  const back = () => {
+    setActiveStep(activeStep - 1)
+  }
+
+  const next = () => {
+    setActiveStep(activeStep + 1);
+  }
+
   return (
     <ThemeProvider theme={appTheme}>
       <div className={classes.app}>
+        <Stepper activeStep={activeStep}>
+          {steps.map((step, index) => {
+            return (
+              <Step key={step.label} completed={false} onClick={() => { setActiveStep(index) }}>
+                <StepLabel >{step.label}</StepLabel>
+              </Step>
+            );
+          })}
+        </Stepper>
+        <div className={classes.inputDiv}>
+          {
+            steps[activeStep].component
+          }
 
-        <div className={classes.leftPane}>
-          <TargetCard />
-          <SourceFolders />
         </div>
 
-        <div className={classes.simulateButtonDiv}>
-          <IconButton className={classes.simulateButton} onClick={onClickSimulate}>
-            <ForwardIcon />
-          </IconButton>
+        <div className={classes.stepperButtons}>
+          <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
+
+            <Button style={{ color: 'black' }} onClick={back} sx={{ mr: 1 }}
+              disabled={activeStep === 0}>
+              Back
+            </Button>
+
+            <Button style={{ color: 'black' }} sx={{ mr: 1 }} onClick={next}
+            >
+              {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+            </Button>
+          </Box>
         </div>
-
-        {
-          changedImages.length > 0 &&
-          <ChangedImagesDialog />
-        }
-
-        {
-          targetError !== SimulationInputError.NO_ERROR &&
-          <InvalidInputDialog error={targetError} onClose={resetError}/>
-        }
-
-        <div className={classes.rightPane}>
-          <SourcePatterns />
-        </div>
-
       </div>
     </ThemeProvider>
   );
