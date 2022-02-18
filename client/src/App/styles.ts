@@ -4,7 +4,6 @@ export const useAppStyles = makeStyles({
     app: {
         textAlign: "center",
         backgroundImage: "linear-gradient(to right, #4778a6 , #5b9bd5)",
-        display: "flex",
         padding: "3vh 1.5vw"
     },
     leftPane: {
@@ -21,5 +20,13 @@ export const useAppStyles = makeStyles({
     },
     simulateButton: {
         margin: "auto"
+    },
+    inputDiv: {
+        height: 'calc(74vh - 106px)',
+        padding: '10vh 10vw'
+    },
+    stepperButtons: {
+        display: 'flex',
+        height: "52px"
     }
 });
