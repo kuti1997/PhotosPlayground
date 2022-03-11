@@ -1,35 +1,41 @@
 import { useEffect } from "react";
 import { SEND_TO_CLIENT_CHANNELS, SEND_TO_SERVER_CHANNELS, GetSimulationRequest, ApplySimulationRequest } from "shared-modules";
-import { useAppDispatch } from "../Store/hooks";
-import { setChangedFiles } from "../Store/Reducers/ChangedFilesReducer";
 
-export const useReceiveFromServer = () => {
-    const dispatch = useAppDispatch();
-
+export const useReceiveFromServer = (callback: (data: any) => void) => {
     useEffect(() => {
         (window as any).api.receive(SEND_TO_CLIENT_CHANNELS.SIMULATION_RESULTS, (data: string) => {
-            console.log(data);
-            dispatch(setChangedFiles(data))
+            callback(data);
         });
     }, []);
 }
 
-export const useSendToServer = () => {
-    return (getSimulationRequest: GetSimulationRequest) => {
-        (window as any).api.send(SEND_TO_SERVER_CHANNELS.GET_SIMULATION, getSimulationRequest);
-    }
+export const sendGetImageSortSimulation = (getSimulationRequest: GetSimulationRequest) => {
+    sendMessageToServer(SEND_TO_SERVER_CHANNELS.GET_IMAGE_SORT_SIMULATION, getSimulationRequest);
 }
 
-export const useSendSimulationToServer = () => {
-    return (applySimulationRequest: ApplySimulationRequest) => {
-        (window as any).api.send(SEND_TO_SERVER_CHANNELS.APPLY_SIMULATION, applySimulationRequest);
-    }
+export const sendApplyImageSortSimulation = (applySimulationRequest: ApplySimulationRequest) => {
+    sendMessageToServer(SEND_TO_SERVER_CHANNELS.APPLY_IMAGE_SORT_SIMULATION, applySimulationRequest);
+}
+
+export const sendGetImageGroupSimulation = (getSimulationRequest: GetSimulationRequest) => {
+    sendMessageToServer(SEND_TO_SERVER_CHANNELS.GET_IMAGE_GROUP_SIMULATION, getSimulationRequest);
 }
 
 export const sendCloseMessage = () => {
-    (window as any).api.send(SEND_TO_SERVER_CHANNELS.CLOSE_SERVER);
+    sendMessageToServer(SEND_TO_SERVER_CHANNELS.CLOSE_SERVER);
 }
 
 export const sendMinimizeMessage = () => {
-    (window as any).api.send(SEND_TO_SERVER_CHANNELS.MINIMIZE);
+    sendMessageToServer(SEND_TO_SERVER_CHANNELS.MINIMIZE);
+}
+
+const sendMessageToServer = (channel: SEND_TO_SERVER_CHANNELS, message?: any) => {
+    const { api } = window as any;
+
+    if (message) {
+        api.send(channel, message);
+    }
+    else {
+        api.send(channel);
+    }
 }
