@@ -1,10 +1,12 @@
 export declare const SEND_TO_SIMULATION_CHANNEL_NAME = "SIMULATE_IMAGES";
-export declare const SEND_TO_SERVER_CHANNELS: {
-    GET_SIMULATION: string;
-    APPLY_SIMULATION: string;
-    CLOSE_SERVER: string;
-    MINIMIZE: string;
-};
+export declare enum SEND_TO_SERVER_CHANNELS {
+    GET_IMAGE_SORT_SIMULATION = "0",
+    APPLY_IMAGE_SORT_SIMULATION = "1",
+    GET_IMAGE_GROUP_SIMULATION = "2",
+    APPLY_IMAGE_GROUP_SIMULATION = "3",
+    CLOSE_SERVER = "4",
+    MINIMIZE = "5"
+}
 export declare const SEND_TO_CLIENT_CHANNELS: {
     SIMULATION_RESULTS: string;
 };

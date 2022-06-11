@@ -3,45 +3,41 @@ import { SourcePatterns } from '../Components/SourcePatterns/SourcePaterns';
 import { useAppStyles } from './styles';
 import { SourceFolders } from '../Components/SourceFolders/SourceFolders';
 import TargetCard from '../Components/TargetCard/TargetCard';
-import { useAppSelector } from '../Store/hooks';
-import { ChangedImagesDialog } from '../Components/ChangedImagesDialog/ChangedImagesDialog';
-import { useReceiveFromServer, useSendToServer } from '../ServerApiHooks/ServerApiHooks';
+import { useAppDispatch, useAppSelector } from '../Store/hooks';
+import { useReceiveFromServer, sendGetImageSortSimulation, sendGetImageGroupSimulation } from '../ServerApiHooks/ServerApiHooks';
 import { appTheme } from './theme';
-import { Box, Button, IconButton, Step, StepLabel, Stepper } from '@mui/material';
-import ForwardIcon from '@material-ui/icons/Forward';
-import { getTargetPropertiesValid, SimulationInputError } from './utils';
+import { Box, Button, Step, StepLabel, Stepper } from '@mui/material';
 import { GetSimulationRequest } from 'shared-modules';
 import { useState } from 'react';
-import { InvalidInputDialog } from '../Components/InvalidInputDialog/InvalidInputDialog';
+import { SelectMode } from '../Components/SelectMode/SelectMode';
+import { setChangedFiles } from '../Store/Reducers/ChangedFilesReducer';
+import { Mode } from '../Store/Reducers/ModeReducer';
 
 function App() {
   const classes = useAppStyles();
 
-  useReceiveFromServer();
+  const dispatch = useAppDispatch();
 
-  const changedImages = useAppSelector((state) => state.changedFiles.changedFiles);
   const targetProperties = useAppSelector((state) => state.inputFiles.targetProperties);
   const sourcePatterns = useAppSelector((state) => state.inputFiles.sourcePatterns);
   const sourceFolders = useAppSelector((state) => state.inputFiles.sourceFolders).map(sourceFolder => sourceFolder.path);
+  const mode = useAppSelector((state) => state.mode.mode);
 
-  const sendDataToServer = useSendToServer();
-
-  const [targetError, setTargetError] = useState(SimulationInputError.NO_ERROR);
-
-  const onClickSimulate = () => {
-    const targetError = getTargetPropertiesValid(targetProperties);
-
-    if (targetError === SimulationInputError.NO_ERROR) {
-      const serverInput: GetSimulationRequest = { targetProperties, filePatterns: sourcePatterns, sourceFolderLocations: sourceFolders };
-      sendDataToServer(serverInput);
-    }
-    else {
-      setTargetError(targetError);
-    }
+  const getServerSimulation = (data: any) => {
+    dispatch(setChangedFiles(data))
   }
 
-  const resetError = () => {
-    setTargetError(SimulationInputError.NO_ERROR);
+  useReceiveFromServer(getServerSimulation);
+
+  const simulate = () => {
+    const serverInput: GetSimulationRequest = { targetProperties, filePatterns: sourcePatterns, sourceFolderLocations: sourceFolders };
+
+    if (mode === Mode.IMAGE_SORT) {
+      sendGetImageSortSimulation(serverInput);
+    }
+    else {
+      sendGetImageGroupSimulation(serverInput);
+    }
   }
 
   const [activeStep, setActiveStep] = useState(0);
@@ -63,12 +59,18 @@ function App() {
   }
 
   const next = () => {
-    setActiveStep(activeStep + 1);
+    if (activeStep === steps.length - 1) {
+      simulate();
+    }
+    else {
+      setActiveStep(activeStep + 1);
+    }
   }
 
   return (
     <ThemeProvider theme={appTheme}>
       <div className={classes.app}>
+        <SelectMode />
         <Stepper activeStep={activeStep}>
           {steps.map((step, index) => {
             return (

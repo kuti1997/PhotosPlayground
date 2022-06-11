@@ -1,10 +1,10 @@
-import { BrowserWindow, remote } from "electron";
+import { BrowserWindow } from "electron";
 import path from 'path';
-import { processPhotosConfig } from './src/simulationRequestHandler';
+import { processPhotosConfig } from './src/imageSort/imageSortSimulation';
 import { app, ipcMain } from 'electron';
 import isDev from 'electron-is-dev';
 import { ApplySimulationRequest, GetSimulationRequest, SEND_TO_CLIENT_CHANNELS, SEND_TO_SERVER_CHANNELS } from "shared-modules";
-import { applySimulationRequest } from "./src/applySimulationRequestHandler";
+import { applySimulationRequest } from "./src/applySimulation";
 
 let win: BrowserWindow;
 
@@ -53,7 +53,7 @@ app.on('activate', () => {
   }
 });
 
-ipcMain.on(SEND_TO_SERVER_CHANNELS.GET_SIMULATION, async (_, request: GetSimulationRequest) => {
+ipcMain.on(SEND_TO_SERVER_CHANNELS.GET_IMAGE_SORT_SIMULATION, async (_, request: GetSimulationRequest) => {
   try {
     const response = await processPhotosConfig(request);
     win.webContents.send(SEND_TO_CLIENT_CHANNELS.SIMULATION_RESULTS, response);
@@ -63,7 +63,27 @@ ipcMain.on(SEND_TO_SERVER_CHANNELS.GET_SIMULATION, async (_, request: GetSimulat
   }
 });
 
-ipcMain.on(SEND_TO_SERVER_CHANNELS.APPLY_SIMULATION, (_, request: ApplySimulationRequest) => {
+ipcMain.on(SEND_TO_SERVER_CHANNELS.APPLY_IMAGE_SORT_SIMULATION, (_, request: ApplySimulationRequest) => {
+  try {
+    const response = applySimulationRequest(request);
+    win.webContents.send(SEND_TO_CLIENT_CHANNELS.SIMULATION_RESULTS, response);
+  }
+  catch (e) {
+    console.log(e);
+  }
+});
+
+ipcMain.on(SEND_TO_SERVER_CHANNELS.GET_IMAGE_GROUP_SIMULATION, async (_, request: GetSimulationRequest) => {
+  try {
+    const response = await processPhotosConfig(request);
+    win.webContents.send(SEND_TO_CLIENT_CHANNELS.SIMULATION_RESULTS, response);
+  }
+  catch (e) {
+    console.log(e);
+  }
+});
+
+ipcMain.on(SEND_TO_SERVER_CHANNELS.APPLY_IMAGE_GROUP_SIMULATION, (_, request: ApplySimulationRequest) => {
   try {
     const response = applySimulationRequest(request);
     win.webContents.send(SEND_TO_CLIENT_CHANNELS.SIMULATION_RESULTS, response);

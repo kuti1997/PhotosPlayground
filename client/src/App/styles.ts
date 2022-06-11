@@ -22,7 +22,7 @@ export const useAppStyles = makeStyles({
         margin: "auto"
     },
     inputDiv: {
-        height: 'calc(74vh - 106px)',
+        height: 'calc(74vh - 144px)',
         padding: '10vh 10vw'
     },
     stepperButtons: {
