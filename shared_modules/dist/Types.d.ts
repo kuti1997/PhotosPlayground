@@ -37,3 +37,11 @@ export interface ChangedImage {
     originPath: string;
     newPath: string;
 }
+export declare enum STATUS {
+    SUCCESS = 0,
+    ERROR = 1
+}
+export declare type Message = {
+    status: STATUS;
+    payload?: string;
+};

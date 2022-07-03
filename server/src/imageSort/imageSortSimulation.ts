@@ -1,10 +1,9 @@
-import { ChangedImage, GetSimulationRequest } from "shared-modules";
+import { GetSimulationRequest,Message, STATUS } from "shared-modules";
 import fs from 'fs';
 import { getImagePath, getNewImageName, sortImages } from "../utils/fileUtils";
 import { ImagePatternProcessor } from "../utils/ImagePatternProcessor";
 import { ImageMetadata } from "../models/image.model";
-
-export async function processPhotosConfig(request: GetSimulationRequest): Promise<ChangedImage[]> {
+export async function processPhotosConfig(request: GetSimulationRequest): Promise<Message> {
     const { targetProperties, sourceFolderLocations, filePatterns } = request;
 
     let allPhotos: ImageMetadata[] = [];
@@ -13,7 +12,7 @@ export async function processPhotosConfig(request: GetSimulationRequest): Promis
 
     for (const sourceFolderLocation of sourceFolderLocations) {
         const imageNames = fs.readdirSync(sourceFolderLocation);
-        
+
         for (const imageName of imageNames) {
             const imagePath = getImagePath(sourceFolderLocation, imageName);
             const imageMetadata = await getImageMetadata(imagePatternProcessors, imageName, imagePath);
@@ -27,13 +26,25 @@ export async function processPhotosConfig(request: GetSimulationRequest): Promis
         }
     };
 
-    return allPhotos.sort(sortImages).map((imageMetaData, index) => {
+    const sortedImages = allPhotos.sort(sortImages);
+    let error = '';
+
+    for (let index = 0; index < sortedImages.length; index++) {
+        const imageMetaData = sortedImages[index]
         const newImageName = getNewImageName(imageMetaData.date, index + 1, targetProperties);
-        return {
-            originPath: imageMetaData.imagePath,
-            newPath: getImagePath(targetProperties.outputFolderLocation, newImageName)
+        const originalPath = imageMetaData.imagePath;
+        const newPath = getImagePath(targetProperties.outputFolderLocation, newImageName)
+        try {
+            fs.renameSync(originalPath, newPath)
         }
-    });
+        catch (exception) {
+            error = `file in ${originalPath} had an error, error is ${exception}`;
+            console.log(error)
+            break;
+        }
+    }
+
+    return error ? {status: STATUS.ERROR, payload: error} : {status: STATUS.SUCCESS};
 }
 
 const getImageMetadata = async (imagePatternProcessors: ImagePatternProcessor[], imageName: string, imagePath: string) => {

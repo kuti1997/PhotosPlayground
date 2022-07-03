@@ -1,12 +1,12 @@
 export const SEND_TO_SIMULATION_CHANNEL_NAME = "SIMULATE_IMAGES";
 
 export enum SEND_TO_SERVER_CHANNELS {
-    GET_IMAGE_SORT_SIMULATION= "0",
-    APPLY_IMAGE_SORT_SIMULATION= "1",
-    GET_IMAGE_GROUP_SIMULATION= "2",
-    APPLY_IMAGE_GROUP_SIMULATION= "3",
-    CLOSE_SERVER= "4",
-    MINIMIZE= "5"
+    GET_IMAGE_SORT_SIMULATION = "0",
+    APPLY_IMAGE_SORT_SIMULATION = "1",
+    GET_IMAGE_GROUP_SIMULATION = "2",
+    APPLY_IMAGE_GROUP_SIMULATION = "3",
+    CLOSE_SERVER = "4",
+    MINIMIZE = "5"
 }
 
 export const SEND_TO_CLIENT_CHANNELS = {
@@ -45,4 +45,13 @@ export interface ApplySimulationRequest {
 export interface ChangedImage {
     originPath: string,
     newPath: string
+}
+
+export enum STATUS {
+    SUCCESS, ERROR
+}
+
+export type Message = {
+    status: STATUS,
+    payload: string
 }

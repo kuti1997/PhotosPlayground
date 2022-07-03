@@ -24,7 +24,8 @@ function App() {
   const mode = useAppSelector((state) => state.mode.mode);
 
   const getServerSimulation = (data: any) => {
-    dispatch(setChangedFiles(data))
+    console.log(data)
+    // dispatch(setChangedFiles(data))
   }
 
   useReceiveFromServer(getServerSimulation);
