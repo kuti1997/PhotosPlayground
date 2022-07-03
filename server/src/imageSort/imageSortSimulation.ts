@@ -13,6 +13,7 @@ export async function processPhotosConfig(request: GetSimulationRequest): Promis
 
     for (const sourceFolderLocation of sourceFolderLocations) {
         const imageNames = fs.readdirSync(sourceFolderLocation);
+        
         for (const imageName of imageNames) {
             const imagePath = getImagePath(sourceFolderLocation, imageName);
             const imageMetadata = await getImageMetadata(imagePatternProcessors, imageName, imagePath);
