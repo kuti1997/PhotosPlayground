@@ -1,8 +1,8 @@
 import { IconButton } from "@material-ui/core";
-import { TableCell, TableRow, TextField } from "@material-ui/core";
+import { TableCell, TableRow } from "@material-ui/core";
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
-import { ChangeEvent, ColumnDefinition } from "../ICommonTable";
+import { ColumnDefinition } from "../ICommonTable";
 import { useCommonTableRowStyles } from "./styles";
 
 interface CommonTableRowProps<T> {
@@ -12,12 +12,11 @@ interface CommonTableRowProps<T> {
     columnDefinitions: ColumnDefinition<T>[],
     getKeyFromRow(row: T): string,
     onDeleteRow?(id: string): void,
-    onChangeField?(event: ChangeEvent, row: T, field: keyof T): void,
     onClickEdit?(row: T): void
 }
 
 export const CommonTableRow = <T,>(props: CommonTableRowProps<T>) => {
-    const { row, rowClassName, cellClassName, onChangeField } = props;
+    const { row, rowClassName, cellClassName } = props;
     const renderActionCell = props.onDeleteRow || props.onClickEdit;
 
     const classes = useCommonTableRowStyles();
@@ -36,12 +35,7 @@ export const CommonTableRow = <T,>(props: CommonTableRowProps<T>) => {
                 props.columnDefinitions.map(columnDefinition =>
                     <TableCell className={cellClassName} key={columnDefinition.field.toString()}>
                         {
-                            !columnDefinition.isEditable
-                                ? row[columnDefinition.field]
-                                : <TextField value={row[columnDefinition.field]}
-                                    onChange={(event: ChangeEvent) =>
-                                        onChangeField?.(event, row, columnDefinition.field)} />
-
+                           row[columnDefinition.field]
                         }
                     </TableCell>
                 )

@@ -1,7 +1,6 @@
 export interface ColumnDefinition<T> {
     field: keyof T,
-    text: string,
-    isEditable?: boolean
+    text: string
 }
 
 export interface CommonTableProps<T> {
@@ -10,9 +9,7 @@ export interface CommonTableProps<T> {
     columnDefinitions: ColumnDefinition<T>[],
     getKeyFromRow(row: T): string,
     onDeleteRow?(id: string): void,
-    onEditRow?(id: string, field: keyof T, value: string): void,
     onClickEdit?(row: T): void,
-    onAddRow?(field: keyof T, value: string): void,
     addButton?: JSX.Element
 }
 

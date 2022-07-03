@@ -5,7 +5,7 @@ import { CommonTableRow } from "./CommonTableRow/CommonTableRow";
 import { EmptyRows } from "./EmptyRows/EmptyRows";
 import { DEFAULT_MIN_ROWS } from "./models";
 import Pagination from '@mui/material/Pagination';
-import { ChangeEvent, CommonTableProps } from "./ICommonTable";
+import { CommonTableProps } from "./ICommonTable";
 import { useState } from "react";
 
 export const CommonTable = <T,>(props: CommonTableProps<T>) => {
@@ -14,10 +14,6 @@ export const CommonTable = <T,>(props: CommonTableProps<T>) => {
     const getRowClassName = (rowIndex: number) => {
         const isOddIndex = rowIndex % 2 === 1;
         return isOddIndex ? classes.oddTableCellColor : classes.evenTableCellColor;
-    }
-
-    const onChangeField = (event: ChangeEvent, row: T, field: keyof T) => {
-        props.onEditRow?.(props.getKeyFromRow(row), field, event.target.value);
     }
 
     const hasActionCell = Boolean(props.onClickEdit || props.onDeleteRow);
@@ -66,7 +62,6 @@ export const CommonTable = <T,>(props: CommonTableProps<T>) => {
                             columnDefinitions={props.columnDefinitions}
                             getKeyFromRow={props.getKeyFromRow}
                             onDeleteRow={props.onDeleteRow}
-                            onChangeField={onChangeField}
                             onClickEdit={props.onClickEdit} />
                     )
                 }
@@ -77,7 +72,6 @@ export const CommonTable = <T,>(props: CommonTableProps<T>) => {
                         numOfRows={numOfEmptyRows}
                         columnDefinitions={props.columnDefinitions}
                         hasActionCell={hasActionCell}
-                        onAddRow={props.onAddRow}
                         tableCellStyle={classes.tableCell} />
                 }
             </TableBody>

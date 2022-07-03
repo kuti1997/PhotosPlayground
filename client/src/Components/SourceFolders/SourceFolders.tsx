@@ -3,8 +3,11 @@ import { useSourcesTableStyles } from "./styles";
 import { useAppDispatch, useAppSelector } from "../../Store/hooks";
 import { setSourceFolders } from "../../Store/Reducers/InputFilesReduer";
 import { SourceFolder } from "shared-modules";
-import { v4 as uuidv4 } from 'uuid';
 import { ColumnDefinition } from "../CommonTable/ICommonTable";
+import { useEffect, useRef } from "react";
+import Fab from '@material-ui/core/Fab';
+import AddIcon from '@material-ui/icons/Add';
+import { v4 } from "uuid";
 
 export const SourceFolders = () => {
     const dispatch = useAppDispatch();
@@ -13,11 +16,19 @@ export const SourceFolders = () => {
 
     const classes = useSourcesTableStyles();
 
+    const inputFile = useRef<HTMLInputElement>(null)
+
+    useEffect(() => {
+        if (inputFile.current !== null) {
+            inputFile.current.setAttribute("directory", "");
+            inputFile.current.setAttribute("webkitdirectory", "");
+        }
+    }, [inputFile]);
+
     const columnsDefinition: ColumnDefinition<SourceFolder>[] = [
         {
             text: 'Folder Path',
-            field: 'path',
-            isEditable: true
+            field: 'path'
         }
     ];
 
@@ -25,31 +36,30 @@ export const SourceFolders = () => {
         return source.id;
     }
 
-    const onEditSource = (sourceId: string, _: keyof SourceFolder, value: string) => {
-        let sourceFolderIndex = sourceFolders.findIndex(sourceFolder => sourceFolder.id === sourceId);
-        const newFolderSource = { id: sourceId, path: value };
-
-        const newFolderSources = [
-            ...sourceFolders.slice(0, sourceFolderIndex),
-            newFolderSource,
-            ...sourceFolders.slice(sourceFolderIndex + 1)
-        ];
-
-        dispatch(setSourceFolders(newFolderSources))
-    }
-
     const onDeleteSource = (sourceId: string) => {
         const newSources = sourceFolders.filter(sourceFolder => sourceFolder.id !== sourceId);
         dispatch(setSourceFolders(newSources))
     }
 
-    const onAddRow = (_: keyof SourceFolder, value: string) => {
-        const newSources = [...sourceFolders, { id: uuidv4(), path: value }];
-        dispatch(setSourceFolders(newSources))
+    const onAddSourceClick = () => {
+        inputFile.current?.click();
+    }
+
+    const onChangeFolder = (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (event.target.files) {
+            const { path } = event.target.files[0] as any
+            const newFolderPath = path.slice(0, path.lastIndexOf('\\'));
+            const newSources = [...sourceFolders, { id: v4(), path: newFolderPath }]
+            dispatch(setSourceFolders(newSources))
+        }
     }
 
     return <div className={classes.tableDiv} >
+        <input type='file' id='file' ref={inputFile} style={{ display: 'none' }} onChange={onChangeFolder} />
         <CommonTable columnDefinitions={columnsDefinition} rows={sourceFolders} getKeyFromRow={getSourceId}
-            onDeleteRow={onDeleteSource} onEditRow={onEditSource} onAddRow={onAddRow} />
+            onDeleteRow={onDeleteSource}
+            addButton={<Fab color="primary" aria-label="add" onClick={onAddSourceClick}>
+                <AddIcon />
+            </Fab>} />
     </div>
 }

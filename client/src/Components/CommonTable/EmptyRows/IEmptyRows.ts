@@ -5,7 +5,6 @@ export interface EmptyRowsProsp<T> {
     numOfRows: number,
     columnDefinitions: ColumnDefinition<T>[],
     hasActionCell: boolean,
-    onAddRow?(field: keyof T, value: string): void,
     tableCellStyle: string
 }
 
