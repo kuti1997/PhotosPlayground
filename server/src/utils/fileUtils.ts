@@ -13,7 +13,7 @@ export const sortImages = (imageMetadata1: ImageMetadata, imageMetadata2: ImageM
     return imageMetadata1.sequence < imageMetadata2.sequence ? -1 : 1;
 }
 
-export const getNewImageName = (originDate: moment.Moment, sequence: number, targetPattern: Target) => {
+export const getNewImageName = (extension: string, originDate: moment.Moment, sequence: number, targetPattern: Target) => {
     let newImageName = targetPattern.namePattern;
 
     if (targetPattern.namePattern.includes("{date}")) {
@@ -26,5 +26,5 @@ export const getNewImageName = (originDate: moment.Moment, sequence: number, tar
         newImageName = newImageName.replace("{sequence}", paddedSequence);
     }
 
-    return newImageName;
+    return `${newImageName}.${extension}`;
 }

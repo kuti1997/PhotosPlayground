@@ -31,9 +31,10 @@ export async function processPhotosConfig(request: GetSimulationRequest): Promis
 
     for (let index = 0; index < sortedImages.length; index++) {
         const imageMetaData = sortedImages[index]
-        const newImageName = getNewImageName(imageMetaData.date, index + 1, targetProperties);
+        const newImageName = getNewImageName(imageMetaData.extension, imageMetaData.date, index + 1, targetProperties);
         const originalPath = imageMetaData.imagePath;
         const newPath = getImagePath(targetProperties.outputFolderLocation, newImageName)
+
         try {
             fs.renameSync(originalPath, newPath)
         }
@@ -49,7 +50,7 @@ export async function processPhotosConfig(request: GetSimulationRequest): Promis
 
 const getImageMetadata = async (imagePatternProcessors: ImagePatternProcessor[], imageName: string, imagePath: string) => {
     for (let i = 0; i < imagePatternProcessors.length; i++) {
-        const imageMetadata = await imagePatternProcessors[i].getImageDateAndSequence(imageName, imagePath);
+        const imageMetadata = await imagePatternProcessors[i].getImageMetadata(imageName, imagePath);
         if (imageMetadata) {
             return imageMetadata;
         }
