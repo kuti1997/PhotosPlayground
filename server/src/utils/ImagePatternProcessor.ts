@@ -3,7 +3,7 @@ import moment from 'moment';
 import ExifReader from "exifreader";
 import fs from 'fs';
 import { convertExifDateToMoment } from "./dateUtils";
-import { DATE_TAG, SEQUENCE_TAG } from "./consts";
+import { ANY_TAG, DATE_TAG, SEQUENCE_TAG } from "./consts";
 
 export interface RegexAndMatches {
     regex: string,
@@ -38,6 +38,8 @@ export class ImagePatternProcessor {
             const dateRegex = "(.+)";
             regex = regex.replace(DATE_TAG, dateRegex);
         }
+
+        regex = regex.replace(ANY_TAG, '.+')
 
         return { regex, sequenceGroupIndex, dateGroupIndex };
     }
