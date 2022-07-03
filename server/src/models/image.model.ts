@@ -1,5 +1,6 @@
 export interface ImageMetadata {
     imagePath: string,
     date: moment.Moment,
-    sequence: number
+    sequence: number,
+    extension: string
 }

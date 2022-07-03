@@ -8,7 +8,8 @@ import { ANY_TAG, DATE_TAG, SEQUENCE_TAG } from "./consts";
 export interface RegexAndMatches {
     regex: string,
     sequenceGroupIndex: number,
-    dateGroupIndex: number
+    dateGroupIndex: number,
+    extensionGroupIndex: number
 }
 
 export class ImagePatternProcessor {
@@ -24,36 +25,38 @@ export class ImagePatternProcessor {
         const sequenceIndex = imageNamePattern.indexOf(SEQUENCE_TAG);
         const dateIndex = imageNamePattern.indexOf(DATE_TAG);
 
-        const sequenceGroupIndex = ImagePatternProcessor.getFirstMatchGroupIndex(sequenceIndex, dateIndex);
-        const dateGroupIndex = ImagePatternProcessor.getFirstMatchGroupIndex(dateIndex, sequenceIndex);
+        let sequenceGroupIndex, extensionGroupIndex, dateGroupIndex = -1;
+
+        if (dateIndex < 0) {
+            sequenceGroupIndex = 1;
+            extensionGroupIndex = 2;
+        }
+        else {
+            extensionGroupIndex = 3;
+
+            if (sequenceIndex > dateIndex) {
+                sequenceGroupIndex = 2;
+                dateGroupIndex = 1;
+            }
+            else {
+                sequenceGroupIndex = 1;
+                dateGroupIndex = 2;
+            }
+        }
 
         let regex = imageNamePattern;
 
-        if (sequenceGroupIndex => 0) {
-            const sequenceRegex = `(\\d{${sequenceLength}})`;
-            regex = regex.replace(SEQUENCE_TAG, sequenceRegex);
-        }
+        const sequenceRegex = `(\\d{${sequenceLength}})`;
+        regex = regex.replace(SEQUENCE_TAG, sequenceRegex);
 
-        if (dateGroupIndex => 0) {
-            const dateRegex = "(.+)";
-            regex = regex.replace(DATE_TAG, dateRegex);
-        }
+        const dateRegex = "(.+)";
+        regex = regex.replace(DATE_TAG, dateRegex);
 
         regex = regex.replace(ANY_TAG, '.+')
 
-        return { regex, sequenceGroupIndex, dateGroupIndex };
-    }
+        regex = regex + '\\.(.+)'
 
-    static getFirstMatchGroupIndex(firstIndex: number, secondIndex: number) {
-        if (firstIndex < 0) {
-            return -1;
-        }
-
-        if (secondIndex < 0) {
-            return 1;
-        }
-
-        return firstIndex < secondIndex ? 1 : 2;
+        return { regex, sequenceGroupIndex, dateGroupIndex, extensionGroupIndex };
     }
 
     getImageDate = async (imageName: string, imagePath: string): Promise<moment.Moment> => {
@@ -97,11 +100,17 @@ export class ImagePatternProcessor {
         return null;
     }
 
-    async getImageDateAndSequence(fileName: string, imagePath: string) {
-        const { regex, sequenceGroupIndex } = this.regexAndMatches;
+    getImageExtension = (imageName: string, regex: string, extensionGroupIndex: number) => {
+        const sequenceMatches = imageName.match(regex);
+        return sequenceMatches?.[extensionGroupIndex]
+    }
+
+    async getImageMetadata(fileName: string, imagePath: string) {
+        const { regex, sequenceGroupIndex, extensionGroupIndex } = this.regexAndMatches;
         const date = await this.getImageDate(fileName, imagePath);
         const sequence = this.getSequenceFromImageName(fileName, regex, sequenceGroupIndex);
+        const extension = this.getImageExtension(fileName, regex, extensionGroupIndex);
         const isMissingProperty = !date || !sequence;
-        return isMissingProperty ? null : { date, sequence };
+        return isMissingProperty ? null : { date, sequence, extension };
     }
 }
