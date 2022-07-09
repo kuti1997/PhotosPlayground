@@ -1,10 +1,10 @@
 import { useEffect } from "react";
-import { SEND_TO_CLIENT_CHANNELS, SEND_TO_SERVER_CHANNELS, GetSimulationRequest, ApplySimulationRequest } from "shared-modules";
+import { SEND_TO_CLIENT_CHANNELS, SEND_TO_SERVER_CHANNELS, GetSimulationRequest, ApplySimulationRequest, Message } from "shared-modules";
 
-export const useReceiveFromServer = (callback: (data: any) => void) => {
+export const useReceiveFromServer = (callback: (data: Message) => void) => {
     useEffect(() => {
-        (window as any).api.receive(SEND_TO_CLIENT_CHANNELS.SIMULATION_RESULTS, (data: string) => {
-            callback(data);
+        (window as any).api.receive(SEND_TO_CLIENT_CHANNELS.SIMULATION_RESULTS, (data: Message) => {
+            callback(data)
         });
     }, []);
 }
