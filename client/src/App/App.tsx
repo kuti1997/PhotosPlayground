@@ -6,14 +6,16 @@ import TargetCard from '../Components/TargetCard/TargetCard';
 import { useAppDispatch, useAppSelector } from '../Store/hooks';
 import { useReceiveFromServer, sendGetImageSortSimulation, sendGetImageGroupSimulation } from '../ServerApiHooks/ServerApiHooks';
 import { appTheme } from './theme';
-import { Box, Button, Step, StepLabel, Stepper } from '@mui/material';
-import { GetSimulationRequest } from 'shared-modules';
+import { Box, Button, Dialog, Step, StepLabel, Stepper } from '@mui/material';
+import { GetSimulationRequest, Message, STATUS } from 'shared-modules';
 import { useState } from 'react';
 import { SelectMode } from '../Components/SelectMode/SelectMode';
 import { setChangedFiles } from '../Store/Reducers/ChangedFilesReducer';
 import { Mode } from '../Store/Reducers/ModeReducer';
+import CustomizedDialog from '../Components/MessageDialog/MessageDialog';
 
 function App() {
+  const [message, setMessage] = useState<Message | null>(null)
   const classes = useAppStyles();
 
   const dispatch = useAppDispatch();
@@ -23,9 +25,8 @@ function App() {
   const sourceFolders = useAppSelector((state) => state.inputFiles.sourceFolders).map(sourceFolder => sourceFolder.path);
   const mode = useAppSelector((state) => state.mode.mode);
 
-  const getServerSimulation = (data: any) => {
-    console.log(data)
-    // dispatch(setChangedFiles(data))
+  const getServerSimulation = (data: Message) => {
+    setMessage(data)
   }
 
   useReceiveFromServer(getServerSimulation);
@@ -70,6 +71,10 @@ function App() {
 
   return (
     <ThemeProvider theme={appTheme}>
+      {
+        message &&
+        <CustomizedDialog message={message} handleClose={() => setMessage(null)}/>
+      }
       <div className={classes.app}>
         <SelectMode />
         <Stepper activeStep={activeStep}>
