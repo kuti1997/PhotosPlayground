@@ -1,21 +1,18 @@
-import { GetSimulationRequest, Message, STATUS, Target } from "shared-modules";
+import { FilePattern, GetSimulationRequest, Message, STATUS, Target } from "shared-modules";
 import fs from 'fs';
 import { getImagePath, getNewImageName, sortImages } from "../utils/fileUtils";
 import { ImagePatternProcessor } from "../utils/ImagePatternProcessor";
 import { ImageMetadata } from "../models/image.model";
-export async function processPhotosConfig(request: GetSimulationRequest): Promise<Message> {
+
+export async function sortAndRenameImages(request: GetSimulationRequest): Promise<Message> {
     const { targetProperties, sourceFolderLocations, filePatterns } = request;
-
-    const imagePatternProcessors = filePatterns.map(filePattern => new ImagePatternProcessor(filePattern));
-
-    let allPhotos: ImageMetadata[];
 
     let error;
 
     try {
-        allPhotos = await getAllImages(sourceFolderLocations, imagePatternProcessors);
-        const sortedImages = allPhotos.sort(sortImages);
-        renameFiles(sortedImages, targetProperties)
+        const allImages = await getAllImages(sourceFolderLocations, filePatterns);
+        const sortedImages = allImages.sort(sortImages)
+        renameImages(sortedImages, targetProperties)
     }
     catch (exception) {
         error = exception.toString()
@@ -24,8 +21,10 @@ export async function processPhotosConfig(request: GetSimulationRequest): Promis
     return error ? { status: STATUS.ERROR, payload: error } : { status: STATUS.SUCCESS };
 }
 
-const getAllImages = async (sourceFolderLocations: string[], imagePatternProcessors: ImagePatternProcessor[]) => {
-    let allPhotos = [];
+export const getAllImages = async (sourceFolderLocations: string[], filePatterns: FilePattern[]) => {
+    let allImages: ImageMetadata[] = [];
+
+    const imagePatternProcessors = filePatterns.map(filePattern => new ImagePatternProcessor(filePattern));
 
     for (const sourceFolderLocation of sourceFolderLocations) {
         const imageNames = fs.readdirSync(sourceFolderLocation);
@@ -38,15 +37,15 @@ const getAllImages = async (sourceFolderLocations: string[], imagePatternProcess
                 throw Error(`image ${imagePath} doesn't match any pattern`);
             }
             else {
-                allPhotos.push({ ...imageMetadata, imagePath });
+                allImages.push({ ...imageMetadata, imagePath });
             }
         }
     };
 
-    return allPhotos;
+    return allImages;
 }
 
-const renameFiles = (sortedImages: ImageMetadata[], targetProperties: Target) => {
+const renameImages = (sortedImages: ImageMetadata[], targetProperties: Target) => {
     for (let index = 0; index < sortedImages.length; index++) {
         const imageMetaData = sortedImages[index]
         const newImageName = getNewImageName(imageMetaData.extension, imageMetaData.date, index + 1, targetProperties);
