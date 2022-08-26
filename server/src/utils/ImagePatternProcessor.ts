@@ -17,13 +17,13 @@ export class ImagePatternProcessor {
     datePattern: string;
 
     constructor(filePattern: FilePattern) {
-        this.regexAndMatches = this.getSourceRegexAndMatches(filePattern.namePattern, filePattern.sequenceLength);
+        this.regexAndMatches = this.getSourceRegexAndMatches(filePattern);
         this.datePattern = filePattern.datePattern;
     }
 
-    getSourceRegexAndMatches(imageNamePattern: string, sequenceLength: number) {
-        const sequenceIndex = imageNamePattern.indexOf(SEQUENCE_TAG);
-        const dateIndex = imageNamePattern.indexOf(DATE_TAG);
+    getSourceRegexAndMatches({ namePattern, sequenceLength, datePattern }: FilePattern) {
+        const sequenceIndex = namePattern.indexOf(SEQUENCE_TAG);
+        const dateIndex = namePattern.indexOf(DATE_TAG);
 
         let sequenceGroupIndex, extensionGroupIndex, dateGroupIndex = -1;
 
@@ -44,17 +44,19 @@ export class ImagePatternProcessor {
             }
         }
 
-        let regex = imageNamePattern;
+        let regex = `^${namePattern}`;
 
         const sequenceRegex = `(\\d{${sequenceLength}})`;
         regex = regex.replace(SEQUENCE_TAG, sequenceRegex);
 
-        const dateRegex = "(.+)";
+        console.log(datePattern)
+
+        const dateRegex = `(.{${datePattern.length}})`;
         regex = regex.replace(DATE_TAG, dateRegex);
 
         regex = regex.replace(ANY_TAG, '.+')
 
-        regex = regex + '\\.(.+)'
+        regex = regex + '\\.(png|jpg|jpeg)$'
 
         return { regex, sequenceGroupIndex, dateGroupIndex, extensionGroupIndex };
     }
@@ -78,7 +80,8 @@ export class ImagePatternProcessor {
 
         const dateMatches = imageName.match(regex);
         const date = dateMatches?.[dateGroupIndex];
-        return date
+
+        return moment(date, datePattern, true).isValid()
             ? moment(date, datePattern)
             : null;
     }
@@ -90,6 +93,10 @@ export class ImagePatternProcessor {
     }
 
     getSequenceFromImageName = (imageName: string, regex: string, sequenceGroupIndex: number) => {
+        console.log(imageName)
+        console.log(regex)
+        console.log(imageName.match(regex))
+
         const sequenceMatches = imageName.match(regex);
         if (sequenceMatches) {
             const sequenceMatchGroup = sequenceMatches[sequenceGroupIndex];

@@ -1,6 +1,6 @@
 import { BrowserWindow } from "electron";
 import path from 'path';
-import { processPhotosConfig } from './src/imageSort/imageSortSimulation';
+import { sortAndRenameImages } from './src/imageSort/imageSort';
 import { app, ipcMain } from 'electron';
 import isDev from 'electron-is-dev';
 import { ApplySimulationRequest, GetSimulationRequest, SEND_TO_CLIENT_CHANNELS, SEND_TO_SERVER_CHANNELS } from "shared-modules";
@@ -55,7 +55,7 @@ app.on('activate', () => {
 
 ipcMain.on(SEND_TO_SERVER_CHANNELS.GET_IMAGE_SORT_SIMULATION, async (_, request: GetSimulationRequest) => {
   try {
-    const response = await processPhotosConfig(request);
+    const response = await sortAndRenameImages(request);
     win.webContents.send(SEND_TO_CLIENT_CHANNELS.SIMULATION_RESULTS, response);
   }
   catch (e) {
@@ -75,7 +75,7 @@ ipcMain.on(SEND_TO_SERVER_CHANNELS.APPLY_IMAGE_SORT_SIMULATION, (_, request: App
 
 ipcMain.on(SEND_TO_SERVER_CHANNELS.GET_IMAGE_GROUP_SIMULATION, async (_, request: GetSimulationRequest) => {
   try {
-    const response = await processPhotosConfig(request);
+    const response = await sortAndRenameImages(request);
     win.webContents.send(SEND_TO_CLIENT_CHANNELS.SIMULATION_RESULTS, response);
   }
   catch (e) {
