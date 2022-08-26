@@ -21,7 +21,7 @@ export class ImagePatternProcessor {
         this.datePattern = filePattern.datePattern;
     }
 
-    getSourceRegexAndMatches({namePattern, sequenceLength, datePattern}: FilePattern) {
+    getSourceRegexAndMatches({ namePattern, sequenceLength, datePattern }: FilePattern) {
         const sequenceIndex = namePattern.indexOf(SEQUENCE_TAG);
         const dateIndex = namePattern.indexOf(DATE_TAG);
 
@@ -44,17 +44,19 @@ export class ImagePatternProcessor {
             }
         }
 
-        let regex = namePattern;
+        let regex = `^${namePattern}`;
 
         const sequenceRegex = `(\\d{${sequenceLength}})`;
         regex = regex.replace(SEQUENCE_TAG, sequenceRegex);
 
-        const dateRegex =`(.{${datePattern.length}})`;
+        console.log(datePattern)
+
+        const dateRegex = `(.{${datePattern.length}})`;
         regex = regex.replace(DATE_TAG, dateRegex);
 
         regex = regex.replace(ANY_TAG, '.+')
 
-        regex = regex + '\\.(.+)'
+        regex = regex + '\\.(png|jpg|jpeg)$'
 
         return { regex, sequenceGroupIndex, dateGroupIndex, extensionGroupIndex };
     }
@@ -79,7 +81,7 @@ export class ImagePatternProcessor {
         const dateMatches = imageName.match(regex);
         const date = dateMatches?.[dateGroupIndex];
 
-        return date
+        return moment(date, datePattern, true).isValid()
             ? moment(date, datePattern)
             : null;
     }
@@ -91,6 +93,10 @@ export class ImagePatternProcessor {
     }
 
     getSequenceFromImageName = (imageName: string, regex: string, sequenceGroupIndex: number) => {
+        console.log(imageName)
+        console.log(regex)
+        console.log(imageName.match(regex))
+
         const sequenceMatches = imageName.match(regex);
         if (sequenceMatches) {
             const sequenceMatchGroup = sequenceMatches[sequenceGroupIndex];

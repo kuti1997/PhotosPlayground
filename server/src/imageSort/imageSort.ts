@@ -10,7 +10,7 @@ export async function sortAndRenameImages(request: GetSimulationRequest): Promis
     let error;
 
     try {
-        const allImages = await getAllImages(sourceFolderLocations, filePatterns);
+        const allImages = await getProcessedImages(sourceFolderLocations, filePatterns);
         const sortedImages = allImages.sort(sortImages)
         renameImages(sortedImages, targetProperties)
     }
@@ -21,7 +21,7 @@ export async function sortAndRenameImages(request: GetSimulationRequest): Promis
     return error ? { status: STATUS.ERROR, payload: error } : { status: STATUS.SUCCESS };
 }
 
-export const getAllImages = async (sourceFolderLocations: string[], filePatterns: FilePattern[]) => {
+export const getProcessedImages = async (sourceFolderLocations: string[], filePatterns: FilePattern[]) => {
     let allImages: ImageMetadata[] = [];
 
     const imagePatternProcessors = filePatterns.map(filePattern => new ImagePatternProcessor(filePattern));
